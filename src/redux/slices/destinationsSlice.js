@@ -8,6 +8,7 @@ const initialState = {
   destinations: [],
   isGettingDestinations: false,
   gettingDestinationsError: "",
+  currentDestination: null,
 };
 
 export const getDestinations = createAsyncThunk(
@@ -15,7 +16,8 @@ export const getDestinations = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(DESTINATIONS_URL);
-      if (response.status !== 200) throw new Error("Couldn't get destinations");
+      console.log("Got destinations");
+      // if (response.status !== 200) throw new Error("Couldn't get destinations");
       return response.data.data.destinations;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -26,6 +28,14 @@ export const getDestinations = createAsyncThunk(
 const destinationsSlice = createSlice({
   name: "destinations",
   initialState,
+  reducers: {
+    setCurrentDestination: (state, { payload }) => {
+      const currentDestination = state.destinations.find(
+        (destination) => destination.address_id === payload
+      );
+      return { ...state, currentDestination };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getDestinations.pending, (state) => {
       return {
@@ -35,6 +45,7 @@ const destinationsSlice = createSlice({
       };
     });
     builder.addCase(getDestinations.fulfilled, (state, { payload }) => {
+      console.log("payload", payload);
       return { ...state, isGettingDestinations: false, destinations: payload };
     });
     builder.addCase(getDestinations.rejected, (state, { payload }) => {
@@ -46,5 +57,7 @@ const destinationsSlice = createSlice({
     });
   },
 });
+
+export const { setCurrentDestination } = destinationsSlice.actions;
 
 export default destinationsSlice.reducer;

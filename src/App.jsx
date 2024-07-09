@@ -14,13 +14,20 @@ import { getStatuses } from "./redux/slices/statusesSlice";
 import { useEffect } from "react";
 import { getRoutes } from "./redux/slices/routesSlice";
 import { getOrigins, setCurrentOrigin } from "./redux/slices/originsSlice";
-import { getAddresses, getDestinations } from "./redux/slices/addressesSlice";
+import { getAddresses } from "./redux/slices/addressesSlice";
 import { getPackages } from "./redux/slices/packagesSlice";
+import {
+  getDestinations,
+  setCurrentDestination,
+} from "./redux/slices/destinationsSlice";
 
 function App() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((store) => store.users);
-  const { origins } = useSelector((store) => store.origins);
+  const { origins, currentOrigin } = useSelector((store) => store.origins);
+  const { destinations, currentDestination } = useSelector(
+    (store) => store.destinations
+  );
 
   const fetchStatuses = () => {
     dispatch(getStatuses());
@@ -46,11 +53,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!currentUser.address_id) return;
+    if (!currentUser?.address_id) return;
     dispatch(setCurrentOrigin(currentUser.address_id));
-  }, [origins, currentUser]);
+    dispatch(setCurrentDestination(currentUser.address_id));
+  }, [origins, destinations, currentUser]);
 
   const fetchData = () => {
+    console.log(destinations);
     // Get live data
     dispatch(getDestinations());
 
@@ -61,12 +70,32 @@ function App() {
     dispatch(getStatuses());
 
     dispatch(getAddresses());
+  };
 
-    dispatch(getPackages());
+  const fetchPackages = () => {
+    console.log("Fetching packages");
+    dispatch(
+      getPackages({
+        address_id: currentUser.address_id,
+        origin_id: currentOrigin.id,
+        destination_id: currentDestination.id,
+      })
+    );
   };
 
   useEffect(() => {
+    if (!currentUser?.address_id) return;
+    dispatch(setCurrentOrigin(currentUser.address_id));
+    dispatch(setCurrentDestination(currentUser.address_id));
+  }, [currentUser?.address_id, origins, destinations]);
+
+  useEffect(() => {
     setInterval(fetchData, 5000);
+  }, []);
+
+  useEffect(() => {
+    if (!currentUser || !currentOrigin || !currentDestination) return;
+    setInterval(fetchPackages, 5000);
   }, []);
 
   return (

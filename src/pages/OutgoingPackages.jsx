@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PageWrapper from "../components/PageWrapper";
 import { useLocation } from "react-router-dom";
-import { IoCloseOutline } from "react-icons/io5";
 import SearchBar from "../components/SearchBar";
-import outgoingPackages from "../mockingData/outgoingPackages";
 import { useDispatch, useSelector } from "react-redux";
 import {
   removeCurrentPackage,
@@ -37,6 +35,7 @@ const TableRow = ({ outgoingPackage, index }) => {
 };
 
 const OutgoingPackageTable = () => {
+  const { outgoingPackages } = useSelector((store) => store.packages);
   return (
     <table className="w-full mt-5">
       <thead className=" bg-skyblue-800 text-white">

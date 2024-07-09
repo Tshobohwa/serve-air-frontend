@@ -5,7 +5,6 @@ import SearchBar from "../components/SearchBar";
 import PackageDetails from "../components/PackageDetails";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  filterIncomingAndOutgoingPackages,
   removeCurrentPackage,
   setCurrentPackage,
 } from "../redux/slices/packagesSlice";
@@ -61,11 +60,7 @@ const IncomingPackageTable = () => {
 const IncomingPackages = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { packages, currentPackage } = useSelector((store) => store.packages);
-
-  useEffect(() => {
-    dispatch(filterIncomingAndOutgoingPackages());
-  }, [packages]);
+  const { currentPackage } = useSelector((store) => store.packages);
 
   useEffect(() => {
     dispatch(removeCurrentPackage());

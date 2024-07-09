@@ -9,11 +9,15 @@ const PACKAGES_URL = `${API_URL}/packages`;
 // Fetch the packages from the remote database
 export const getPackages = createAsyncThunk(
   "packages/getPackages",
-  async (_, { rejectWithValue }) => {
+  async ({ address_id, origin_id, destination_id }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(PACKAGES_URL);
+      const response = await axios.get(
+        `${PACKAGES_URL}?address_id=${address_id}&origin_id=${origin_id}&destination_id=${destination_id}`
+      );
       if (response.status !== 200) throw new Error("Couldn't get packages");
-      return response.data.data.packages;
+      console.log(response.data.data.packages);
+      console.log(response.data.data);
+      return response.data.data;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -51,16 +55,6 @@ const packagesSlice = createSlice({
     resetIsPackagePosted: (state) => {
       return { ...state, packageIsPosted: false };
     },
-    filterIncomingAndOutgoingPackages: (state) => {
-      const { packages } = state;
-      const incomingPackages = packages.filter(
-        (incomingPackage) => incomingPackage.origin
-      );
-      const outgoingPackages = packages.filter(
-        (outgoingPackage) => outgoingPackage.destination
-      );
-      return { ...state, incomingPackages, outgoingPackages };
-    },
     setCurrentPackage: (state, { payload }) => {
       const { packages } = state;
       const currentPackage = packages.find((pack) => pack.id === payload);
@@ -76,7 +70,13 @@ const packagesSlice = createSlice({
     });
     builder.addCase(getPackages.fulfilled, (state, { payload }) => {
       console.log(payload);
-      return { ...state, isGettingPackages: false, packages: payload };
+      return {
+        ...state,
+        isGettingPackages: false,
+        packages: payload.packages,
+        incomingPackages: payload.incoming_packages,
+        outgoingPackages: payload.outgoing_packages,
+      };
     });
 
     builder.addCase(postPackage.pending, (state) => {
@@ -102,11 +102,7 @@ const packagesSlice = createSlice({
   },
 });
 
-export const {
-  filterIncomingAndOutgoingPackages,
-  setCurrentPackage,
-  removeCurrentPackage,
-  resetIsPackagePosted,
-} = packagesSlice.actions;
+export const { setCurrentPackage, removeCurrentPackage, resetIsPackagePosted } =
+  packagesSlice.actions;
 
 export default packagesSlice.reducer;

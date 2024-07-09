@@ -62,11 +62,26 @@ const initialState = {
   destinations: [],
   isGettingDestinations: false,
   isGettingOrigins: false,
+  currentOrigin: null,
+  currentDestination: null,
 };
 
 const addressesSlice = createSlice({
   name: "addresses",
   initialState,
+
+  reducers: {
+    setCurrentOriginAndCurrentDestination: (state, { payload }) => {
+      const currentOrigin = state.origins.find(
+        (origin) => origin.address_id === payload
+      );
+      const currentDestination = state.destinations.find(
+        (destination) => destination.address_id === payload
+      );
+
+      return { ...state, currentDestination, currentOrigin };
+    },
+  },
 
   extraReducers: (builder) => {
     builder.addCase(getAddresses.pending, (state) => {
@@ -106,5 +121,7 @@ const addressesSlice = createSlice({
     });
   },
 });
+
+export const { setCurrentOriginAndCurrentDestination } = addressesSlice.actions;
 
 export default addressesSlice.reducer;
