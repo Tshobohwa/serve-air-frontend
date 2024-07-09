@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Target all scrollbars (except Firefox) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Style the scrollbar track (background) */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px 5px 5px 5px; /* Top & right corners rounded */
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #6db8f8; /* Dark gray for the thumb */
+  border-radius: 5px; /* All corners rounded */
+}
+
+/* Target Firefox scrollbars (limited styling options) */
+scrollbar-color: #888 transparent; /* Set thumb color and remove background */
