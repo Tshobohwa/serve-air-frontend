@@ -13,7 +13,34 @@ import PackageDetails from "../components/PackageDetails";
 const TableRow = ({ outgoingPackage, index }) => {
   const dispatch = useDispatch();
 
-  const { id, destination, weight, status } = outgoingPackage;
+  const { id, weight, status_id, route_id } = outgoingPackage;
+
+  const { destinations } = useSelector((store) => store.destinations);
+  const { routes } = useSelector((store) => store.routes);
+  const { statuses } = useSelector((store) => store.statuses);
+
+  const [status, setStatus] = useState({});
+  const [route, setRoute] = useState({});
+  const [destination, setDestination] = useState({});
+
+  useEffect(() => {
+    if (!status[0]) return;
+    setStatus(statuses.find((status) => status.id === status_id));
+  }, [statuses]);
+
+  useEffect(() => {
+    if (!routes[0]) return;
+    setRoute(routes.find((route) => route.id === route_id));
+  }, [routes]);
+
+  useEffect(() => {
+    if (!destinations[0] || !route?.id)
+      setDestination(
+        destinations.find(
+          (destination) => destination.id === route.destination_id
+        )
+      );
+  }, [destinations, route?.id]);
 
   const clickHandler = () => {
     dispatch(setCurrentPackage(id));
@@ -28,8 +55,8 @@ const TableRow = ({ outgoingPackage, index }) => {
     >
       <td className=" flex items-center pl-5">{id}</td>
       <td className=" flex items-center pl-5">{weight} Kg</td>
-      <td className=" flex items-center pl-5">{destination}</td>
-      <td className=" flex items-center pl-5">{status}</td>
+      <td className=" flex items-center pl-5">{destination?.address?.city}</td>
+      <td className=" flex items-center pl-5">{status?.name}</td>
     </tr>
   );
 };

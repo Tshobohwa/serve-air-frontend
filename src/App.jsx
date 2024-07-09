@@ -59,7 +59,6 @@ function App() {
   }, [origins, destinations, currentUser]);
 
   const fetchData = () => {
-    console.log(destinations);
     // Get live data
     dispatch(getDestinations());
 
@@ -73,7 +72,6 @@ function App() {
   };
 
   const fetchPackages = () => {
-    console.log("Fetching packages");
     dispatch(
       getPackages({
         address_id: currentUser.address_id,

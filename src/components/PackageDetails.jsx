@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,19 +9,44 @@ const PackageDetails = () => {
   const dispatch = useDispatch();
   const {
     id,
-    origin,
-    destination,
-    sender,
-    receiver,
+    route_id,
+    sender_name,
+    sender_phone_number,
+    receiver_name,
+    receiver_phone_number,
     description,
     status,
     weight,
     price,
   } = currentPackage;
 
+  const { routes } = useSelector((store) => store.routes);
+  const { origins } = useSelector((store) => store.origins);
+  const { destinations } = useSelector((store) => store.destinations);
+
+  const [origin, setOrigin] = useState({});
+  const [destination, setDestination] = useState({});
+  const [route, setRoute] = useState({});
+
   const closeHandler = () => {
     dispatch(removeCurrentPackage());
   };
+
+  useEffect(() => {
+    setRoute(routes.find((route) => route.id === route_id));
+  }, [routes]);
+
+  useEffect(() => {
+    setOrigin(origins.find((or) => or.id === route.origin_id));
+  }, [origins, route]);
+
+  useEffect(() => {
+    setDestination(
+      destinations.find(
+        (destination) => destination.id === route.destination_id
+      )
+    );
+  }, [destinations, route]);
 
   return (
     <div className=" w-[20rem] p-4 rounded-lg border border-skyblue-100 bg-white h-fit">
@@ -38,30 +63,30 @@ const PackageDetails = () => {
         <p className=" text-center my-2">sender</p>
         <div className="flex justify-between w-full pb-1 border-b border-[#d3d3d3]">
           <p>names:</p>
-          <p>{sender?.name}</p>
+          <p>{sender_name}</p>
         </div>
         <div className="flex justify-between w-full border-b py-1 border-[#d3d3d3]">
           <p>telephone:</p>
-          <p>{sender?.telephone}</p>
+          <p>{sender_phone_number}</p>
         </div>
         <div className="flex justify-between w-full pt-1">
           <p>address:</p>
-          <p>{origin}</p>
+          <p>{origin?.address?.city}</p>
         </div>
       </div>
       <div className=" rounded-lg border border-skyblue-100 p-3 mt-3 w-full">
         <p className=" text-center my-2">Receiver</p>
         <div className="flex justify-between w-full pb-1 border-b border-[#d3d3d3]">
           <p>names:</p>
-          <p>{receiver?.name}</p>
+          <p>{receiver_name}</p>
         </div>
         <div className="flex justify-between w-full border-b py-1 border-[#d3d3d3]">
           <p>telephone:</p>
-          <p>{receiver?.telephone}</p>
+          <p>{receiver_phone_number}</p>
         </div>
         <div className="flex justify-between w-full pt-1">
           <p>address:</p>
-          <p>{destination}</p>
+          <p>{destination?.address?.city}</p>
         </div>
       </div>
       <div className=" rounded-lg border border-skyblue-100 p-3 mt-3 w-full">

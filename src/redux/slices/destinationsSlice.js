@@ -16,7 +16,6 @@ export const getDestinations = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(DESTINATIONS_URL);
-      console.log("Got destinations");
       // if (response.status !== 200) throw new Error("Couldn't get destinations");
       return response.data.data.destinations;
     } catch (error) {
@@ -45,7 +44,6 @@ const destinationsSlice = createSlice({
       };
     });
     builder.addCase(getDestinations.fulfilled, (state, { payload }) => {
-      console.log("payload", payload);
       return { ...state, isGettingDestinations: false, destinations: payload };
     });
     builder.addCase(getDestinations.rejected, (state, { payload }) => {
