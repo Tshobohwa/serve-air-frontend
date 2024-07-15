@@ -37,7 +37,7 @@ export const postPackage = createAsyncThunk(
 );
 
 const initialState = {
-  packages: [...incomingFreight, ...outgoingFreight],
+  packages: [],
   currentPackage: null,
   incomingPackages: [],
   outgoingPackages: [],
