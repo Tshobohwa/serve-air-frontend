@@ -69,31 +69,24 @@ function App() {
     dispatch(getStatuses());
 
     dispatch(getAddresses());
-  };
 
-  const fetchPackages = () => {
+    if (
+      !currentDestination?.id ||
+      !currentOrigin?.id ||
+      currentUser?.address_id
+    )
+      return;
     dispatch(
       getPackages({
-        address_id: currentUser.address_id,
-        origin_id: currentOrigin.id,
-        destination_id: currentDestination.id,
+        address_id: currentUser?.address_id,
+        origin_id: currentOrigin?.id,
+        destination_id: currentDestination?.id,
       })
     );
   };
 
   useEffect(() => {
-    if (!currentUser?.address_id) return;
-    dispatch(setCurrentOrigin(currentUser.address_id));
-    dispatch(setCurrentDestination(currentUser.address_id));
-  }, [currentUser?.address_id, origins, destinations]);
-
-  useEffect(() => {
     setInterval(fetchData, 5000);
-  }, []);
-
-  useEffect(() => {
-    if (!currentUser || !currentOrigin || !currentDestination) return;
-    setInterval(fetchPackages, 5000);
   }, []);
 
   return (
