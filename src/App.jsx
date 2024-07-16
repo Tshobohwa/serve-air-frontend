@@ -59,17 +59,6 @@ function App() {
   }, [origins, destinations, currentUser]);
 
   const fetchData = () => {
-    // Get live data
-    dispatch(getDestinations());
-
-    dispatch(getOrigins());
-
-    dispatch(getRoutes());
-
-    dispatch(getStatuses());
-
-    dispatch(getAddresses());
-
     if (
       !currentDestination?.id ||
       !currentOrigin?.id ||
