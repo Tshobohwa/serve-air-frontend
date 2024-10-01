@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import incomingFreight from "../../mockingData/incomingFreight";
-import outgoingFreight from "../../mockingData/outgoingPackages";
 import axios from "axios";
 import API_URL from "../api/api";
 
