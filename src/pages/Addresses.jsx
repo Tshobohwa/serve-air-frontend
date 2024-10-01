@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import SmallRoundedButton from "../components/SmallRoundedButton";
 import NewAddress from "../popups/NewAddress";
+import { useDispatch, useSelector } from "react-redux";
+import { getAddresses } from "../redux/slices/addressesSlice";
+import AddressCard from "../cards/AddressCard";
 
 const Addresses = () => {
+  const dispatch = useDispatch();
   const [addingAddress, setAddingAddress] = useState(false);
+  const { addresses } = useSelector((store) => store.addresses);
+
+  useEffect(() => {
+    dispatch(getAddresses());
+  }, []);
+
+  useEffect(() => {
+    console.log(addresses);
+  }, [addresses]);
+
   return (
     <Sidebar>
       {addingAddress && (
@@ -17,6 +31,11 @@ const Addresses = () => {
           onClick={() => setAddingAddress(true)}
         />
       </header>
+      <div className="w-full grid grid-cols-4 gap-4 mt-4">
+        {addresses.map((address) => (
+          <AddressCard address={address} key={address.id} />
+        ))}
+      </div>
     </Sidebar>
   );
 };
