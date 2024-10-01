@@ -15,6 +15,7 @@ export const getPackages = createAsyncThunk(
         `${PACKAGES_URL}?address_id=${address_id}&origin_id=${origin_id}&destination_id=${destination_id}`
       );
       if (response.status !== 200) throw new Error("Couldn't get packages");
+      console.log(response.data.data);
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err);

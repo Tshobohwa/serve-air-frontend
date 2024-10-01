@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getPackages,
   removeCurrentPackage,
   setCurrentPackage,
 } from "../redux/slices/packagesSlice";
@@ -62,7 +63,12 @@ const TableRow = ({ outgoingPackage, index }) => {
 };
 
 const OutgoingPackageTable = () => {
+  const dispatch = useDispatch();
   const { outgoingPackages } = useSelector((store) => store.packages);
+
+  useEffect(() => {
+    dispatch(getPackages());
+  }, []);
   return (
     <table className="w-full mt-5">
       <thead className=" bg-skyblue-800 text-white">

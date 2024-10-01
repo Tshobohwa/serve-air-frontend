@@ -86,7 +86,7 @@ function App() {
   };
 
   useEffect(() => {
-    setInterval(fetchData, 5000);
+    fetchData();
   }, []);
 
   return (
