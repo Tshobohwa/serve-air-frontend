@@ -5,7 +5,8 @@ import { LuLayoutDashboard } from "react-icons/lu";
 
 const Sidebar = ({ children }) => {
   return (
-    <div className="w-full pl-[17rem]">
+    <div className="w-full pl-[17rem] pt-[4rem] pr-4">
+      <div className="fixed top-0 left-[16rem] right-0 h-[3rem] bg-skyblue-100"></div>
       <div className="w-[16rem] fixed left-0 bg-blue-950 top-0 bottom-0 px-4">
         <div className="w-full flex flex-col gap-4 mt-4">
           <SidebarLink
