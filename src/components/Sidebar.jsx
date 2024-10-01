@@ -13,15 +13,17 @@ const Sidebar = ({ children }) => {
             name={"Dashboard"}
             icon={<LuLayoutDashboard size={20} />}
           />
-          <SidebarLink
-            to={"/addresses"}
-            name={"Adresses"}
-            icon={<FaLocationDot size={20} />}
-          />
+
           <SidebarLink
             to={"/routes"}
             name={"Routes"}
             icon={<FaRoute size={20} />}
+          />
+
+          <SidebarLink
+            to={"/addresses"}
+            name={"Adresses"}
+            icon={<FaLocationDot size={20} />}
           />
         </div>
       </div>
