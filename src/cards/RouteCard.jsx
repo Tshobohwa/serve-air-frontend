@@ -1,5 +1,6 @@
 import React from "react";
-import { FaLocationDot, FaRoute } from "react-icons/fa6";
+import { BiPlus } from "react-icons/bi";
+import { FaLocationDot, FaPen, FaRoute } from "react-icons/fa6";
 
 const Address = ({ address, type }) => {
   const { city, territory, province } = address;
@@ -28,11 +29,16 @@ const RouteCard = ({ route }) => {
       </div>
       <Address address={origin.address} type={"Origin"} />
       <Address address={destination.address} type={"Destination"} />
-      <div>
-        <p>pricing:</p>
-        <p className="font-semibold text-3xl">
-          {pricing} <span className="text-sm">USD / KG</span>
-        </p>
+      <div className="flex items-end gap-2">
+        <div>
+          <p>pricing:</p>
+          <p className="font-semibold text-3xl">
+            {pricing} <span className="text-sm">USD / KG</span>
+          </p>
+        </div>
+        <button className="w-[2rem] border border-sky-400 h-[2rem] rounded-full flex items-center justify-center">
+          <FaPen size={16} />
+        </button>
       </div>
     </div>
   );
