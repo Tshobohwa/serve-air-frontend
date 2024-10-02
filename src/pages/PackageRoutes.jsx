@@ -14,10 +14,6 @@ const PackageRoutes = () => {
   useEffect(() => {
     dispatch(getRoutes());
   }, []);
-
-  useEffect(() => {
-    console.log(routes);
-  }, [routes]);
   return (
     <Sidebar>
       {addingRoute && <NewRoute closeHandler={() => setAddingRoute(false)} />}
