@@ -45,7 +45,7 @@ export const getAddresses = createAsyncThunk(
 
 export const postAddress = createAsyncThunk(
   "addresses/postAddress",
-  async (address, { rejectWithValue }) => {
+  async ({ address }, { rejectWithValue }) => {
     try {
       const response = await axios.post(ADDRESSES_URL, { address });
       if (response.status !== 201) throw new Error("Couldn't post address");
@@ -64,6 +64,7 @@ const initialState = {
   isGettingOrigins: false,
   currentOrigin: null,
   currentDestination: null,
+  addressPosted: false,
 };
 
 const addressesSlice = createSlice({
@@ -71,6 +72,9 @@ const addressesSlice = createSlice({
   initialState,
 
   reducers: {
+    resetAddressPosted: (state) => {
+      return { ...state, addressPosted: false };
+    },
     setCurrentOriginAndCurrentDestination: (state, { payload }) => {
       const currentOrigin = state.origins.find(
         (origin) => origin.address_id === payload
@@ -98,7 +102,12 @@ const addressesSlice = createSlice({
     });
     builder.addCase(postAddress.fulfilled, (state, { payload }) => {
       const { addresses } = state;
-      return { ...state, addresses: [payload, ...addresses], isPosting: false };
+      return {
+        ...state,
+        addresses: [payload, ...addresses],
+        isPosting: false,
+        addressPosted: true,
+      };
     });
     builder.addCase(postAddress.rejected, (state, { payload }) => {
       return { ...state, error: payload };
@@ -122,6 +131,7 @@ const addressesSlice = createSlice({
   },
 });
 
-export const { setCurrentOriginAndCurrentDestination } = addressesSlice.actions;
+export const { setCurrentOriginAndCurrentDestination, resetAddressPosted } =
+  addressesSlice.actions;
 
 export default addressesSlice.reducer;

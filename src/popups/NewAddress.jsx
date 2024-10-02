@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopupContainer from "./PopupContainer";
 import { IoClose } from "react-icons/io5";
 import TextInputWithLabel from "../components/TextInputWithLabel";
 import RoundedButton from "../components/RoundedButton";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  postAddress,
+  resetAddressPosted,
+} from "../redux/slices/addressesSlice";
 
 const NewAddress = ({ closeHandler }) => {
+  const dispatch = useDispatch();
+
   const [city, setCity] = useState("");
   const [province, setProvince] = useState("");
   const [territory, setTerritory] = useState("");
+
+  const { addressPosted } = useSelector((state) => state.addresses);
+
+  const submitHandler = () => {
+    const address = {
+      city,
+      province,
+      territory,
+    };
+    console.log(address);
+    dispatch(postAddress({ address }));
+  };
+
+  useEffect(() => {
+    if (!addressPosted) return;
+    dispatch(resetAddressPosted());
+    closeHandler();
+  }, [addressPosted]);
 
   return (
     <PopupContainer>
@@ -36,7 +61,7 @@ const NewAddress = ({ closeHandler }) => {
           />
         </section>
         <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">
-          <RoundedButton children={"Add Address"} />
+          <RoundedButton children={"Add Address"} onClick={submitHandler} />
         </footer>
       </div>
     </PopupContainer>

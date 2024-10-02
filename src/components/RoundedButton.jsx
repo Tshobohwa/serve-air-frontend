@@ -6,7 +6,7 @@ const RoundedButton = ({ onClick, children, isLoading }) => {
     <button
       onClick={onClick}
       className="w-full h-[56px] rounded-[28px] bg-skyblue-800 text-white font-semibold text-lg mt-4"
-      disabled={!isLoading}
+      disabled={isLoading}
     >
       {isLoading ? <BeatLoader size={24} color="white" /> : children}
     </button>
