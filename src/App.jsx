@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Addresses from "./pages/Addresses";
 import PackageRoutes from "./pages/PackageRoutes";
 import Warehouse from "./pages/Warehouse";
+import IncomingPackages from "./pages/IncomingPackages";
+import OutgoingPackages from "./pages/OutgoingPackages";
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +18,8 @@ function App() {
         <Route path="/addresses" element={<Addresses />} />
         <Route path="/routes" element={<PackageRoutes />} />
         <Route path="/warehouse" element={<Warehouse />} />
+        <Route path="/incoming_packages" element={<IncomingPackages />} />
+        <Route path="/outgoing_packages" element={<OutgoingPackages />} />
       </Routes>
     </BrowserRouter>
   );
