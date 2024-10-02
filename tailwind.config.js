@@ -21,6 +21,9 @@ export default {
           200: "#4D4D4D",
         },
       },
+      gridTemplateColumns: {
+        "4rem-cols-3": "4rem 1fr 1fr 1fr",
+      },
     },
   },
   plugins: [],
