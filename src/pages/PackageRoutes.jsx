@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import SmallRoundedButton from "../components/SmallRoundedButton";
 import NewRoute from "../popups/NewRoute";
+import { useDispatch } from "react-redux";
+import { getRoutes } from "../redux/slices/routesSlice";
 
 const PackageRoutes = () => {
+  const dispatch = useDispatch();
   const [addingRoute, setAddingRoute] = useState(false);
+
+  useEffect(() => {
+    dispatch(getRoutes());
+  }, []);
   return (
     <Sidebar>
       {addingRoute && <NewRoute closeHandler={() => setAddingRoute(false)} />}

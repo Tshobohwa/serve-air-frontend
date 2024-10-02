@@ -10,6 +10,7 @@ export const getRoutes = createAsyncThunk(
     try {
       const response = await axios.get(ROUTES_URL);
       if (response.status !== 200) throw new Error("Couldn't get routes");
+      console.log(response.data.data);
       return response.data.data.routes;
     } catch (error) {
       return rejectWithValue(error);
