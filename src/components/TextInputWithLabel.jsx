@@ -5,6 +5,8 @@ const TextInputWithLabel = ({
   type = "text",
   onChange,
   placeholder,
+  value = "",
+  step = "",
 }) => {
   return (
     <div className=" w-full my-3 font-outfit">
@@ -14,6 +16,8 @@ const TextInputWithLabel = ({
         type={type}
         onChange={onChange}
         placeholder={placeholder}
+        value={value}
+        step={step}
       />
     </div>
   );
