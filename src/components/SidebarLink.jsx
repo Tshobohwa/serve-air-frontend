@@ -7,8 +7,10 @@ const SidebarLink = ({ to, name, icon }) => {
     <Link to={to}>
       <div
         className={`${
-          currentPathname === to ? "bg-yellow-500 pl-4" : "bg-transparent"
-        } flex gap-4 w-full h-[3rem] items-center  rounded-lg`}
+          currentPathname === to
+            ? "bg-skyblue-800 text-white pl-4"
+            : "bg-transparent"
+        } flex gap-4 w-full h-[3rem] items-center  rounded-lg text-skyblue-800`}
       >
         {icon} {name}
       </div>

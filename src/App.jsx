@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Addresses from "./pages/Addresses";
 import PackageRoutes from "./pages/PackageRoutes";
+import Warehouse from "./pages/Warehouse";
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/addresses" element={<Addresses />} />
         <Route path="/routes" element={<PackageRoutes />} />
+        <Route path="/warehouse" element={<Warehouse />} />
       </Routes>
     </BrowserRouter>
   );
