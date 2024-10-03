@@ -48,16 +48,19 @@ const NewAddress = ({ closeHandler }) => {
             label={"Province"}
             placeholder={"Enter province name"}
             onChange={(e) => setProvince(e.target.value)}
+            value={province}
           />
           <TextInputWithLabel
             label={"Territory"}
             placeholder={"Enter territory name"}
             onChange={(e) => setTerritory(e.target.value)}
+            value={territory}
           />
           <TextInputWithLabel
             label={"City"}
             placeholder={"Enter city name"}
             onChange={(e) => setCity(e.target.value)}
+            value={city}
           />
         </section>
         <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">

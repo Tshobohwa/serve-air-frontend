@@ -7,6 +7,7 @@ const TextInputWithLabel = ({
   placeholder,
   value = "",
   step = "",
+  readOnly = false,
 }) => {
   return (
     <div className=" w-full my-3 font-outfit">
@@ -18,6 +19,7 @@ const TextInputWithLabel = ({
         placeholder={placeholder}
         value={value}
         step={step}
+        readOnly={readOnly}
       />
     </div>
   );

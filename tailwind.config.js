@@ -24,6 +24,7 @@ export default {
       gridTemplateColumns: {
         "4rem-cols-3": "4rem 1fr 1fr 1fr",
         "1-2": "1fr 2fr",
+        "3rem-1": "3rem 1fr",
       },
     },
   },
