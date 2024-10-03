@@ -8,6 +8,8 @@ import PackageRoutes from "./pages/PackageRoutes";
 import Warehouse from "./pages/Warehouse";
 import IncomingPackages from "./pages/IncomingPackages";
 import OutgoingPackages from "./pages/OutgoingPackages";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <BrowserRouter>

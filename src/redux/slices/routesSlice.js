@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import API_URL from "../api/api";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ROUTES_URL = `${API_URL}/routes`;
 
@@ -23,6 +24,8 @@ export const postRoute = createAsyncThunk(
   async (route, { rejectWithValue }) => {
     try {
       const response = await axios.post(ROUTES_URL, { route });
+      console.log(route);
+      console.log(response);
       if (response.status !== 201) throw new Error("Couldn't post route");
       return response.data.data.route[0];
     } catch (err) {
@@ -49,6 +52,7 @@ const initialState = {
   currentRoute: null,
   isPostingRoute: false,
   isGettingRoutes: false,
+  routePosted: false,
 };
 
 const routesSlice = createSlice({
@@ -63,6 +67,9 @@ const routesSlice = createSlice({
     removeCurrentRoute: (state) => {
       return { ...state, currentRoute: null };
     },
+    resetRoutePosted: (state) => {
+      return { ...state, routePosted: false };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getRoutes.pending, (state) => {
@@ -75,14 +82,20 @@ const routesSlice = createSlice({
       return { ...state, isPostingRoute: true };
     });
     builder.addCase(postRoute.fulfilled, (state, { payload }) => {
+      toast.success("Route successfully created!");
       let { routes } = state;
       routes = [...routes, payload];
-      return { ...state, isPostingRoute: false, routes };
+      return { ...state, isPostingRoute: false, routes, routePosted: true };
+    });
+    builder.addCase(postRoute.rejected, (state) => {
+      toast.error("Route not created!");
+      return { ...state, isPostingRoute: false };
     });
     builder.addCase(updateRoute.pending, (state) => {
       return { ...state, isUpdatingRoute: true };
     });
     builder.addCase(updateRoute.fulfilled, (state, { payload }) => {
+      toast.success("Route pricing successfully updated!");
       let { routes } = state;
       routes = routes.map((route) => {
         if (route.id === payload.id) return payload;
@@ -93,6 +106,7 @@ const routesSlice = createSlice({
   },
 });
 
-export const { setCurrentRoute, removeCurrentRoute } = routesSlice.actions;
+export const { setCurrentRoute, removeCurrentRoute, resetRoutePosted } =
+  routesSlice.actions;
 
 export default routesSlice.reducer;

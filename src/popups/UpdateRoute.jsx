@@ -3,11 +3,16 @@ import PopupContainer from "./PopupContainer";
 import RoundedButton from "../components/RoundedButton";
 import TextInputWithLabel from "../components/TextInputWithLabel";
 import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 const UpdateRoute = ({ closeHandler, initialPricing, route }) => {
   const { origin, destination } = route;
   const [pricing, setPricing] = useState(initialPricing);
-  const submitHandler = () => {};
+  const submitHandler = () => {
+    toast.success("Clicked successfully", {
+      hideProgressBar: true,
+    });
+  };
   return (
     <PopupContainer>
       <div className="w-[36rem] bg-white">

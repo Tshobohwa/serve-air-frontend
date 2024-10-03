@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import API_URL from "../api/api";
+import { toast } from "react-toastify";
 
 const ADDRESSES_URL = `${API_URL}/addresses`;
 
@@ -65,6 +66,7 @@ const initialState = {
   currentOrigin: null,
   currentDestination: null,
   addressPosted: false,
+  isPostingAddress: false,
 };
 
 const addressesSlice = createSlice({
@@ -98,19 +100,21 @@ const addressesSlice = createSlice({
       return { ...state, isFetching: false, error: payload };
     });
     builder.addCase(postAddress.pending, (state) => {
-      return { ...state, isPosting: true };
+      return { ...state, isPostingAddress: true };
     });
     builder.addCase(postAddress.fulfilled, (state, { payload }) => {
+      toast.success("New Address successfully created!");
       const { addresses } = state;
       return {
         ...state,
         addresses: [payload, ...addresses],
-        isPosting: false,
+        isPostingAddress: false,
         addressPosted: true,
       };
     });
     builder.addCase(postAddress.rejected, (state, { payload }) => {
-      return { ...state, error: payload };
+      toast.error("Couldn't create the address!");
+      return { ...state, error: payload, isPostingAddress: false };
     });
 
     builder.addCase(getOrigins.pending, (state) => {

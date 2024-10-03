@@ -16,7 +16,9 @@ const NewAddress = ({ closeHandler }) => {
   const [province, setProvince] = useState("");
   const [territory, setTerritory] = useState("");
 
-  const { addressPosted } = useSelector((state) => state.addresses);
+  const { addressPosted, isPostingAddress } = useSelector(
+    (state) => state.addresses
+  );
 
   const submitHandler = () => {
     const address = {
@@ -64,7 +66,12 @@ const NewAddress = ({ closeHandler }) => {
           />
         </section>
         <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">
-          <RoundedButton children={"Add Address"} onClick={submitHandler} />
+          <RoundedButton
+            children={"Add Address"}
+            onClick={submitHandler}
+            a
+            isLoading={isPostingAddress}
+          />
         </footer>
       </div>
     </PopupContainer>

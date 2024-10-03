@@ -4,10 +4,12 @@ import { FaLocationDot, FaRoute, FaWarehouse } from "react-icons/fa6";
 import { LuLayoutDashboard } from "react-icons/lu";
 import logo from "../assets/logo.png";
 import { GoPackageDependencies, GoPackageDependents } from "react-icons/go";
+import { ToastContainer, Slide } from "react-toastify";
 
 const Sidebar = ({ children }) => {
   return (
     <div className="w-full pl-[17rem] pt-[4rem] pr-4">
+      <ToastContainer autoClose={5000} transition={Slide} />
       <div className="fixed top-0 left-[255px] right-0 h-[3rem] bg-white border-b border-b-skyblue-200 z-30"></div>
       <div className="w-[16rem] fixed left-0 bg-white top-0 bottom-0 px-7 border-r border-r-skyblue-200 z-20">
         <div className="w-full flex flex-col gap-4 mt-4">

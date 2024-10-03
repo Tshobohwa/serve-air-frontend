@@ -1,11 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PopupContainer from "./PopupContainer";
 import RoundedButton from "../components/RoundedButton";
 import TextInputWithLabel from "../components/TextInputWithLabel";
 import { IoClose } from "react-icons/io5";
+import SelectWithLabel from "../components/SelectWithLabel";
+import { useDispatch, useSelector } from "react-redux";
+import { getAddresses } from "../redux/slices/addressesSlice";
+import { postRoute, resetRoutePosted } from "../redux/slices/routesSlice";
 
 const NewRoute = ({ closeHandler }) => {
-  const submitHandler = () => {};
+  const dispatch = useDispatch();
+  const { addresses } = useSelector((state) => state.addresses);
+  const [origin_id, setOriginId] = useState(null);
+  const [destination_id, setDestinationId] = useState(null);
+  const [destinationAddresses, setDestinationAddresses] = useState([]);
+  const [pricing, setPricing] = useState(0);
+
+  const { routePosted } = useSelector((state) => state.routes);
+
+  const submitHandler = () => {
+    dispatch(postRoute({ origin_id, destination_id, pricing: +pricing }));
+  };
+
+  useEffect(() => {
+    setDestinationAddresses(
+      addresses.filter((address) => address.id !== origin_id)
+    );
+    if (origin_id === destination_id)
+      setDestinationId(destinationAddresses[0]?.id);
+  }, [origin_id, addresses]);
+
+  useEffect(() => {
+    setOriginId(addresses[0]?.id);
+  }, [addresses]);
+
+  useEffect(() => {
+    console.table({ origin_id, destination_id });
+  }, [origin_id, destination_id]);
+
+  useEffect(() => {
+    dispatch(getAddresses());
+  }, []);
+
+  useEffect(() => {
+    if (!routePosted) return;
+    closeHandler();
+    dispatch(resetRoutePosted());
+  }, [routePosted]);
   return (
     <PopupContainer>
       <div className="w-[36rem] bg-white">
@@ -16,18 +57,30 @@ const NewRoute = ({ closeHandler }) => {
           </button>
         </header>
         <section className="w-full p-4">
-          <TextInputWithLabel
-            label={"Province"}
-            placeholder={"Enter province name"}
+          <SelectWithLabel
+            label={"Origin"}
+            options={addresses}
+            valueExtractor={(address) => address.id}
+            optionExtractor={(address) => address.city}
+            onChange={(e) => setOriginId(+e.target.value)}
+            keyExtractor={(address) => address.id}
+            value={origin_id}
           />
-          <TextInputWithLabel
-            label={"Territory"}
-            placeholder={"Enter territory name"}
+          <SelectWithLabel
+            label={"Destination"}
+            options={destinationAddresses}
+            valueExtractor={(address) => address.id}
+            optionExtractor={(address) => address.city}
+            onChange={(e) => setDestinationId(+e.target.value)}
+            value={destination_id}
+            keyExtractor={(address) => address.id}
           />
           <TextInputWithLabel
             label={"Pricing (USD)"}
             placeholder={"Enter route pricing"}
             onChange={(e) => setPricing(e.target.value)}
+            value={pricing}
+            type="number"
           />
         </section>
         <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">
