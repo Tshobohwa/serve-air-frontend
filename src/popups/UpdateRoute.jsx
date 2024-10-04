@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopupContainer from "./PopupContainer";
 import RoundedButton from "../components/RoundedButton";
 import TextInputWithLabel from "../components/TextInputWithLabel";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { resetHasUpdatedRoute, updateRoute } from "../redux/slices/routesSlice";
 
 const UpdateRoute = ({ closeHandler, initialPricing, route }) => {
-  const { origin, destination } = route;
+  const dispatch = useDispatch();
+  const { origin, destination, id } = route;
   const [pricing, setPricing] = useState(initialPricing);
+
+  const { hasUpdatedRoute } = useSelector((state) => state.routes);
   const submitHandler = () => {
-    toast.success("Clicked successfully", {
-      hideProgressBar: true,
-    });
+    const route = { pricing };
+    dispatch(updateRoute({ route, id }));
   };
+  useEffect(() => {
+    if (!hasUpdatedRoute) return;
+    dispatch(resetHasUpdatedRoute());
+    closeHandler();
+  }, [hasUpdatedRoute]);
   return (
     <PopupContainer>
       <div className="w-[36rem] bg-white">

@@ -37,8 +37,10 @@ const UpdatePackageStatus = ({ closeHandler, shippingPackage }) => {
         <section className="w-full overflow-y-scroll h-[20rem]">
           {statuses.map((status) => (
             <div className="w-full h-[5rem] border-b border-b-skyblue-200 hover:cursor-pointer hover:bg-skyblue-200 flex flex-col justify-center pl-6">
-              <p className="text-lg">{status.name}</p>
-              <p className="text-skyblue-800">{status.description}</p>
+              <p className="text-lg font-semibold">{status.name}</p>
+              <p className="text-skyblue-800 text-sm italic">
+                {status.description}
+              </p>
             </div>
           ))}
         </section>

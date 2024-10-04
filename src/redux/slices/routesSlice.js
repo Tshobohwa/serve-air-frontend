@@ -53,6 +53,7 @@ const initialState = {
   isPostingRoute: false,
   isGettingRoutes: false,
   routePosted: false,
+  hasUpdatedRoute: false,
 };
 
 const routesSlice = createSlice({
@@ -69,6 +70,9 @@ const routesSlice = createSlice({
     },
     resetRoutePosted: (state) => {
       return { ...state, routePosted: false };
+    },
+    resetHasUpdatedRoute: (state) => {
+      return { ...state, hasUpdatedRoute: false };
     },
   },
   extraReducers: (builder) => {
@@ -101,12 +105,22 @@ const routesSlice = createSlice({
         if (route.id === payload.id) return payload;
         return route;
       });
-      return { ...state, isUpdatingRoute: false, routes, currentRoute: null };
+      return {
+        ...state,
+        isUpdatingRoute: false,
+        routes,
+        currentRoute: null,
+        hasUpdatedRoute: true,
+      };
     });
   },
 });
 
-export const { setCurrentRoute, removeCurrentRoute, resetRoutePosted } =
-  routesSlice.actions;
+export const {
+  setCurrentRoute,
+  removeCurrentRoute,
+  resetRoutePosted,
+  resetHasUpdatedRoute,
+} = routesSlice.actions;
 
 export default routesSlice.reducer;

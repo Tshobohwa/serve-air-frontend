@@ -16,7 +16,7 @@ const NewRoute = ({ closeHandler }) => {
   const [destinationAddresses, setDestinationAddresses] = useState([]);
   const [pricing, setPricing] = useState(0);
 
-  const { routePosted } = useSelector((state) => state.routes);
+  const { routePosted, isPostingRoute } = useSelector((state) => state.routes);
 
   const submitHandler = () => {
     dispatch(postRoute({ origin_id, destination_id, pricing: +pricing }));
@@ -84,7 +84,11 @@ const NewRoute = ({ closeHandler }) => {
           />
         </section>
         <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">
-          <RoundedButton children={"Add route"} onClick={submitHandler} />
+          <RoundedButton
+            children={"Add route"}
+            onClick={submitHandler}
+            isLoading={isPostingRoute}
+          />
         </footer>
       </div>
     </PopupContainer>
