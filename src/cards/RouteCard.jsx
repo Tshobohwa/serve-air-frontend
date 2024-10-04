@@ -34,7 +34,7 @@ const RouteCard = ({ route }) => {
         />
       )}
       <div className="h-[4rem] w-[4rem] bg-skyblue-50 rounded-full flex items-center justify-center text-skyblue-600">
-        <FaRoute />
+        <FaRoute size={32} />
       </div>
       <Address address={origin.address} type={"Origin"} />
       <Address address={destination.address} type={"Destination"} />
