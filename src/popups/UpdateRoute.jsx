@@ -12,12 +12,15 @@ const UpdateRoute = ({ closeHandler, initialPricing, route }) => {
   const { origin, destination, id } = route;
   const [pricing, setPricing] = useState(initialPricing);
 
+  const { token } = useSelector((state) => state.users);
+
   const { hasUpdatedRoute, isUpdatingRoute } = useSelector(
     (state) => state.routes
   );
   const submitHandler = () => {
     const route = { pricing };
-    dispatch(updateRoute({ route, id }));
+    console.log(token);
+    dispatch(updateRoute({ route, id, token }));
   };
   useEffect(() => {
     if (!hasUpdatedRoute) return;

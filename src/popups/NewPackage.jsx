@@ -19,7 +19,6 @@ const NewPackage = ({ closeHandler }) => {
   const [receiver_phone_number, setReceiverPhonenumber] = useState("");
   const [weight, setWeight] = useState("");
   const [description, setDescription] = useState("");
-  const [currentRouteId, setCurrentRouteId] = useState(0);
   const [currentRoute, setCurrentRoute] = useState(0);
   const [price, setprice] = useState(0);
   const [route_id, setRouteId] = useState(null);
@@ -27,9 +26,8 @@ const NewPackage = ({ closeHandler }) => {
   const { currentUser, token } = useSelector((state) => state.users);
 
   const submitHandler = () => {
-    console.log(currentUser);
     const shippment = {
-      weight,
+      weight: +weight,
       description,
       status_id: 1,
       route_id,
@@ -46,6 +44,7 @@ const NewPackage = ({ closeHandler }) => {
           ? currentRoute?.destination?.address.id
           : currentRoute?.origin?.address.id,
     };
+    console.log(currentUser);
     console.log(shippment);
     dispatch(
       postPackage({
@@ -60,12 +59,14 @@ const NewPackage = ({ closeHandler }) => {
   }, []);
 
   useEffect(() => {
-    setCurrentRoute(routes.find((route) => route.id === currentRouteId));
-  }, [currentRouteId, routes]);
+    setCurrentRoute(routes.find((route) => route.id === route_id));
+  }, [route_id, routes]);
 
   useEffect(() => {
+    console.log(currentRoute);
     const intweight = +weight;
-    setprice(currentRoute?.price ? currentRoute.price * intweight : 0);
+    console.log(weight);
+    setprice(currentRoute?.pricing ? currentRoute.pricing * intweight : 0);
   }, [currentRoute, weight]);
 
   return (
@@ -138,7 +139,7 @@ const NewPackage = ({ closeHandler }) => {
                   `from ${route.origin.address.city} to ${route.destination.address.city}`
                 }
                 defaultOption={"Select package route"}
-                onChange={(e) => setCurrentRouteId(+e.target.value)}
+                onChange={(e) => setRouteId(+e.target.value)}
                 keyExtractor={(route) => route.id}
               />
               <TextInputWithLabel

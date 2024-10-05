@@ -47,7 +47,7 @@ export const updateRoute = createAsyncThunk(
       const response = await axios.put(
         `${ROUTES_URL}/${id}`,
         { route },
-        { token }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status !== 200) throw new Error("Couldn't update route");
       return response.data.data.route;
@@ -123,6 +123,9 @@ const routesSlice = createSlice({
         currentRoute: null,
         hasUpdatedRoute: true,
       };
+    });
+    builder.addCase(updateRoute.rejected, (state) => {
+      return { ...state, isUpdatingRoute: false };
     });
   },
 });
