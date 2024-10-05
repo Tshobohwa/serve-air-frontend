@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import API_URL from "../api/api";
+import { toast } from "react-toastify";
 
 const PACKAGES_URL = `${API_URL}/packages`;
 
@@ -92,6 +93,7 @@ const packagesSlice = createSlice({
     });
 
     builder.addCase(postPackage.fulfilled, (state, { payload }) => {
+      toast.success("Package posted successfully");
       return {
         ...state,
         isPostingPackage: false,
@@ -101,6 +103,7 @@ const packagesSlice = createSlice({
     });
 
     builder.addCase(postPackage.rejected, (state, { payload }) => {
+      toast.error("Couldn't post package!");
       return { ...state, isPostingPackage: false, postPackageError: payload };
     });
   },

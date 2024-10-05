@@ -25,6 +25,8 @@ const NewPackage = ({ closeHandler }) => {
 
   const { currentUser, token } = useSelector((state) => state.users);
 
+  const { isPostingPackage } = useSelector((state) => state.packages);
+
   const submitHandler = () => {
     const shippment = {
       weight: +weight,
@@ -151,7 +153,11 @@ const NewPackage = ({ closeHandler }) => {
             </div>
           </section>
           <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">
-            <RoundedButton children={"Add package"} onClick={submitHandler} />
+            <RoundedButton
+              children={"Add package"}
+              onClick={submitHandler}
+              isLoading={isPostingPackage}
+            />
           </footer>
         </div>
       </div>
