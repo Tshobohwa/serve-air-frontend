@@ -36,7 +36,7 @@ export const postPackage = createAsyncThunk(
         { shippment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (response?.status !== 200) throw new Error("Couldn't create package");
+      if (response?.status !== 201) throw new Error("Couldn't create package");
       return response.data.data.package;
     } catch (err) {
       return rejectWithValue(err.message);

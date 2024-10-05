@@ -6,7 +6,10 @@ import RoundedButton from "../components/RoundedButton";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoutes } from "../redux/slices/routesSlice";
 import SelectWithLabel from "../components/SelectWithLabel";
-import { postPackage } from "../redux/slices/packagesSlice";
+import {
+  postPackage,
+  resetIsPackagePosted,
+} from "../redux/slices/packagesSlice";
 
 const NewPackage = ({ closeHandler }) => {
   const dispatch = useDispatch();
@@ -25,7 +28,9 @@ const NewPackage = ({ closeHandler }) => {
 
   const { currentUser, token } = useSelector((state) => state.users);
 
-  const { isPostingPackage } = useSelector((state) => state.packages);
+  const { isPostingPackage, packageIsPosted } = useSelector(
+    (state) => state.packages
+  );
 
   const submitHandler = () => {
     const shippment = {
@@ -70,6 +75,12 @@ const NewPackage = ({ closeHandler }) => {
     console.log(weight);
     setprice(currentRoute?.pricing ? currentRoute.pricing * intweight : 0);
   }, [currentRoute, weight]);
+
+  useEffect(() => {
+    if (!packageIsPosted) return;
+    dispatch(resetIsPackagePosted());
+    closeHandler();
+  }, [packageIsPosted]);
 
   return (
     <PopupContainer>
