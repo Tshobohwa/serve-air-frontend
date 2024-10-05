@@ -1,19 +1,86 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { BASE_URL } from "../api/api";
+
+export const signup = createAsyncThunk(
+  "users/signup",
+  async ({ user }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/signup`, {
+        user,
+      });
+      if (response.status !== 200) throw new Error("Couldn't sign up user");
+      const data = response.data.status.data;
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const login = createAsyncThunk(
+  "users/login",
+  async ({ user }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/login`, {
+        user,
+      });
+      if (response.status !== 200) throw new Error("Invalid email or password");
+      const data = response.data.status.data;
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+      return response.data.status.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// export const logout = createAsyncThunk(
+//   "users/logout",
+//   async ({ token }, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.delete(`${BASE_URL}/logout`, {
+//         headers: { Authorization: `Barer ${token}` },
+//       });
+//       if (response.status !== 200 || response.status !== 401)
+//         throw new Error("Couldn't logout");
+//       return true;
+//     } catch (error) {
+//       return rejectWithValue(error);
+//     }
+//   }
+// );
 
 const initialState = {
-  currentUser: {
-    id: 1,
-    address_id: 8,
-    email: "user1@admin.com",
-    created_at: "2024-05-31T08:26:04.708Z",
-    updated_at: "2024-05-31T08:26:04.708Z",
-    first_name: "User 1",
-    last_name: "admin",
-  },
+  currentUser: JSON.parse(localStorage.getItem("currentUser")) || null,
+  token: localStorage.getItem("token") || null,
 };
+
 const usersSlice = createSlice({
-  name: "user",
+  name: "users",
   initialState,
+  reducers: {
+    logout: () => {
+      localStorage.clear();
+      return initialState;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(login.fulfilled, (state, { payload }) => {
+      return { ...state, currentUser: payload.user, token: payload.token };
+    });
+    builder.addCase(signup.fulfilled, (state, { payload }) => {
+      return { ...state, currentUser: payload.user, token: payload.token };
+    });
+    // builder.addCase(logout.fulfilled, (state) => {
+    //   localStorage.clear();
+    //   return initialState;
+    // });
+  },
 });
+
+export const { logout } = usersSlice.actions;
 
 export default usersSlice.reducer;

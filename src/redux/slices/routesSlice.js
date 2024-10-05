@@ -7,9 +7,11 @@ const ROUTES_URL = `${API_URL}/routes`;
 
 export const getRoutes = createAsyncThunk(
   "routes/getRoutes",
-  async (_, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(ROUTES_URL);
+      const response = await axios.get(ROUTES_URL, {
+        headers: { Authorization: `Barer ${token}` },
+      });
       if (response.status !== 200) throw new Error("Couldn't get routes");
       console.log(response.data.data);
       return response.data.data.routes;
@@ -21,9 +23,13 @@ export const getRoutes = createAsyncThunk(
 
 export const postRoute = createAsyncThunk(
   "routes/postRoute",
-  async (route, { rejectWithValue }) => {
+  async ({ route, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(ROUTES_URL, { route });
+      const response = await axios.post(
+        ROUTES_URL,
+        { route },
+        { headers: { Authorization: `Barer ${token}` } }
+      );
       console.log(route);
       console.log(response);
       if (response.status !== 201) throw new Error("Couldn't post route");
@@ -36,9 +42,13 @@ export const postRoute = createAsyncThunk(
 
 export const updateRoute = createAsyncThunk(
   "routes/updateRoute",
-  async ({ route, id }, { rejectWithValue }) => {
+  async ({ route, id, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${ROUTES_URL}/${id}`, { route });
+      const response = await axios.put(
+        `${ROUTES_URL}/${id}`,
+        { route },
+        { token }
+      );
       if (response.status !== 200) throw new Error("Couldn't update route");
       return response.data.data.route;
     } catch (err) {
@@ -54,6 +64,7 @@ const initialState = {
   isGettingRoutes: false,
   routePosted: false,
   hasUpdatedRoute: false,
+  isUpdatingRoute: false,
 };
 
 const routesSlice = createSlice({

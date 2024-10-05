@@ -12,7 +12,9 @@ const UpdateRoute = ({ closeHandler, initialPricing, route }) => {
   const { origin, destination, id } = route;
   const [pricing, setPricing] = useState(initialPricing);
 
-  const { hasUpdatedRoute } = useSelector((state) => state.routes);
+  const { hasUpdatedRoute, isUpdatingRoute } = useSelector(
+    (state) => state.routes
+  );
   const submitHandler = () => {
     const route = { pricing };
     dispatch(updateRoute({ route, id }));
@@ -58,7 +60,11 @@ const UpdateRoute = ({ closeHandler, initialPricing, route }) => {
           />
         </section>
         <footer className="w-full p-4 bg-skyblue-50 flex items-center justify-center">
-          <RoundedButton children={"save updates"} onClick={submitHandler} />
+          <RoundedButton
+            children={"save updates"}
+            onClick={submitHandler}
+            isLoading={isUpdatingRoute}
+          />
         </footer>
       </div>
     </PopupContainer>

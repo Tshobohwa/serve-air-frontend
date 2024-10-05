@@ -6,9 +6,11 @@ const STATUSES_URL = `${API_URL}/statuses`;
 
 export const getStatuses = createAsyncThunk(
   "statuses/getStatuses",
-  async (_, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(STATUSES_URL);
+      const response = await axios.get(STATUSES_URL, {
+        headers: { Authorization: `Barer ${token}` },
+      });
       if (response.status !== 200) throw new Error("Couldn't get statuses");
       return response.data.data.statuses;
     } catch (error) {

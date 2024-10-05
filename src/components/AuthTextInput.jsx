@@ -6,6 +6,7 @@ const AuthTextInput = ({
   onChange,
   type = "text",
   label,
+  value = "",
 }) => {
   return (
     <div className=" w-full my-3 font-outfit">
@@ -17,6 +18,7 @@ const AuthTextInput = ({
           type={type}
           onChange={onChange}
           placeholder={placeholder}
+          value={value}
         />
       </div>
     </div>

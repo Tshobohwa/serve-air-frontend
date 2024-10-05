@@ -18,11 +18,25 @@ const NewPackage = ({ closeHandler }) => {
   const [receiver_phonenumber, setReceiverPhonenumber] = useState("");
   const [weight, setWeight] = useState("");
   const [description, setDescription] = useState("");
+  const [currentRouteId, setCurrentRouteId] = useState(0);
+  const [currentRoute, setCurrentRoute] = useState(0);
+  const [price, setprice] = useState(0);
+
   const submitHandler = () => {};
 
   useEffect(() => {
     dispatch(getRoutes());
   }, []);
+
+  useEffect(() => {
+    setCurrentRoute(routes.find((route) => route.id === currentRouteId));
+  }, [currentRouteId, routes]);
+
+  useEffect(() => {
+    const intweight = +weight;
+    setprice(currentRoute?.price ? currentRoute.price * intweight : 0);
+  }, [currentRoute, weight]);
+
   return (
     <PopupContainer>
       <div className=" pt-[30rem] pb-[10rem] flex items-center justify-center w-full h-full">
@@ -69,7 +83,7 @@ const NewPackage = ({ closeHandler }) => {
             <div className="w-full p-4 border border-skyblue-200">
               <p className="text-xl font-semibold">Package</p>
               <TextInputWithLabel
-                label={"Weight"}
+                label={"Weight (KG)"}
                 placeholder={"Enter package weight"}
                 type="number"
                 onChange={(e) => setWeight(e.target.value)}
@@ -83,7 +97,7 @@ const NewPackage = ({ closeHandler }) => {
               />
             </div>
             <div className="w-full p-4 border border-skyblue-200">
-              <p className="text-xl font-semibold">Route and pricing</p>
+              <p className="text-xl font-semibold">Route and price</p>
               <SelectWithLabel
                 label={"Route"}
                 options={routes}
@@ -92,12 +106,15 @@ const NewPackage = ({ closeHandler }) => {
                 optionExtractor={(route) =>
                   `from ${route.origin.address.city} to ${route.destination.address.city}`
                 }
+                defaultOption={"Select package route"}
+                onChange={(e) => setCurrentRouteId(+e.target.value)}
                 keyExtractor={(route) => route.id}
               />
               <TextInputWithLabel
-                label={"Pricing(USD)"}
-                placeholder={"Package pricing"}
+                label={"price(USD)"}
+                placeholder={"Package price"}
                 readOnly={true}
+                value={price.toFixed(2) + " USD"}
               />
             </div>
           </section>

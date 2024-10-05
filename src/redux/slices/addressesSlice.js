@@ -7,9 +7,13 @@ const ADDRESSES_URL = `${API_URL}/addresses`;
 
 export const getOrigins = createAsyncThunk(
   "addresses/getOrigins",
-  async (_, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/origins`);
+      const response = await axios.get(`${API_URL}/origins`, {
+        headers: {
+          Authorization: `Barer ${token}`,
+        },
+      });
       if (response.status !== 200) throw new Error("Couldn't get origins");
       return response.data.data.origins;
     } catch (error) {
@@ -20,9 +24,11 @@ export const getOrigins = createAsyncThunk(
 
 export const getDestinations = createAsyncThunk(
   "addresses/getDestinations",
-  async (_, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/destinations`);
+      const response = await axios.get(`${API_URL}/destinations`, {
+        headers: { Authorization: `Barer ${token}` },
+      });
       if (response.status !== 200) throw new Error("Couldn't get destinations");
       return response.data.data.destinations;
     } catch (error) {
@@ -33,9 +39,11 @@ export const getDestinations = createAsyncThunk(
 
 export const getAddresses = createAsyncThunk(
   "addresses/getAddresses",
-  async (_, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(ADDRESSES_URL);
+      const response = await axios.get(ADDRESSES_URL, {
+        headers: `Barer ${token}`,
+      });
       if (response.status !== 200) throw new Error("Couldn't get Addresses!");
       return response.data.data.addresses;
     } catch (err) {
@@ -46,9 +54,13 @@ export const getAddresses = createAsyncThunk(
 
 export const postAddress = createAsyncThunk(
   "addresses/postAddress",
-  async ({ address }, { rejectWithValue }) => {
+  async ({ address, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(ADDRESSES_URL, { address });
+      const response = await axios.post(
+        ADDRESSES_URL,
+        { address },
+        { headers: { Authorization: `Barer ${token}` } }
+      );
       if (response.status !== 201) throw new Error("Couldn't post address");
       return response.data.data.address;
     } catch (err) {

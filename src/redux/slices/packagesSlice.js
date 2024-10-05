@@ -7,10 +7,14 @@ const PACKAGES_URL = `${API_URL}/packages`;
 // Fetch the packages from the remote database
 export const getPackages = createAsyncThunk(
   "packages/getPackages",
-  async ({ address_id, origin_id, destination_id }, { rejectWithValue }) => {
+  async (
+    { address_id, origin_id, destination_id, token },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.get(
-        `${PACKAGES_URL}?address_id=${address_id}&origin_id=${origin_id}&destination_id=${destination_id}`
+        `${PACKAGES_URL}?address_id=${address_id}&origin_id=${origin_id}&destination_id=${destination_id}`,
+        { headers: { Authorization: `Barer ${token}` } }
       );
       if (response.status !== 200) throw new Error("Couldn't get packages");
       console.log(response.data.data);
@@ -24,9 +28,13 @@ export const getPackages = createAsyncThunk(
 // Post package in the remote database
 export const postPackage = createAsyncThunk(
   "packages/postPackage",
-  async ({ newPackage }, { rejectWithValue }) => {
+  async ({ newPackage, token }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(PACKAGES_URL, { package: newPackage });
+      const response = await axios.post(
+        PACKAGES_URL,
+        { package: newPackage },
+        { headers: { Authorization: `Barer ${token}` } }
+      );
       if (response?.status !== 200) throw new Error("Couldn't create package");
       return response.data.data.package;
     } catch (err) {

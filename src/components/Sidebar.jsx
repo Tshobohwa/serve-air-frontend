@@ -5,8 +5,19 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import logo from "../assets/logo.png";
 import { GoPackageDependencies, GoPackageDependents } from "react-icons/go";
 import { ToastContainer, Slide } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { TbShoppingCartDown } from "react-icons/tb";
+import { CiLogout } from "react-icons/ci";
+import { logout } from "../redux/slices/usersSlice";
 
 const Sidebar = ({ children }) => {
+  const dispatch = useDispatch();
+
+  const { token } = useSelector((state) => state.users);
+
+  const logoutHandler = () => {
+    dispatch(logout({ token }));
+  };
   return (
     <div className="w-full pl-[17rem] pt-[4rem] pr-4">
       <ToastContainer
@@ -55,6 +66,12 @@ const Sidebar = ({ children }) => {
             name={"Adresses"}
             icon={<FaLocationDot size={20} />}
           />
+          <button onClick={logoutHandler}>
+            <div className="w-full h-[3rem] border border-skyblue-800 rounded-full font-semibold text-lg flex items-center gap-4 pl-[1.5rem] text-skyblue-800 hover:text-white hover:bg-skyblue-800">
+              <CiLogout size={32} />
+              <p>Logout</p>
+            </div>
+          </button>
         </div>
       </div>
       {children}
