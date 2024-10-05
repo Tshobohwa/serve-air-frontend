@@ -6,6 +6,7 @@ import RoundedButton from "../components/RoundedButton";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoutes } from "../redux/slices/routesSlice";
 import SelectWithLabel from "../components/SelectWithLabel";
+import { postPackage } from "../redux/slices/packagesSlice";
 
 const NewPackage = ({ closeHandler }) => {
   const dispatch = useDispatch();
@@ -13,19 +14,49 @@ const NewPackage = ({ closeHandler }) => {
   const { routes } = useSelector((state) => state.routes);
 
   const [sender_name, setSenderName] = useState("");
-  const [sender_phonenumber, setSenderPhonenumber] = useState("");
+  const [sender_phone_number, setSenderPhonenumber] = useState("");
   const [receiver_name, setReceiverName] = useState("");
-  const [receiver_phonenumber, setReceiverPhonenumber] = useState("");
+  const [receiver_phone_number, setReceiverPhonenumber] = useState("");
   const [weight, setWeight] = useState("");
   const [description, setDescription] = useState("");
   const [currentRouteId, setCurrentRouteId] = useState(0);
   const [currentRoute, setCurrentRoute] = useState(0);
   const [price, setprice] = useState(0);
+  const [route_id, setRouteId] = useState(null);
 
-  const submitHandler = () => {};
+  const { currentUser, token } = useSelector((state) => state.users);
+
+  const submitHandler = () => {
+    console.log(currentUser);
+    const shippment = {
+      weight,
+      description,
+      status_id: 1,
+      route_id,
+      current_address_id: currentUser.address_id,
+      creator_id: currentUser.id,
+      sender_name,
+      sender_phone_number,
+      receiver_name,
+      receiver_phone_number,
+      price,
+      origin_id: currentUser.address_id,
+      destination_id:
+        currentRoute?.origin?.address.id === currentUser.address_id
+          ? currentRoute?.destination?.address.id
+          : currentRoute?.origin?.address.id,
+    };
+    console.log(shippment);
+    dispatch(
+      postPackage({
+        token,
+        shippment,
+      })
+    );
+  };
 
   useEffect(() => {
-    dispatch(getRoutes());
+    dispatch(getRoutes({ token }));
   }, []);
 
   useEffect(() => {
@@ -61,7 +92,7 @@ const NewPackage = ({ closeHandler }) => {
                 placeholder={"Enter sender phone number"}
                 type="tel"
                 onChange={setSenderPhonenumber}
-                value={sender_phonenumber}
+                value={sender_phone_number}
               />
             </div>
             <div className="w-full p-4 border border-skyblue-200">
@@ -77,7 +108,7 @@ const NewPackage = ({ closeHandler }) => {
                 placeholder={"Enter receiver phone number"}
                 type="tel"
                 onChange={setReceiverPhonenumber}
-                value={receiver_phonenumber}
+                value={receiver_phone_number}
               />
             </div>
             <div className="w-full p-4 border border-skyblue-200">

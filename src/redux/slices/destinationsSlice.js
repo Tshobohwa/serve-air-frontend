@@ -16,7 +16,7 @@ export const getDestinations = createAsyncThunk(
   async ({ token }, { rejectWithValue }) => {
     try {
       const response = await axios.get(DESTINATIONS_URL, {
-        headers: { Authorization: `Barer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       // if (response.status !== 200) throw new Error("Couldn't get destinations");
       return response.data.data.destinations;

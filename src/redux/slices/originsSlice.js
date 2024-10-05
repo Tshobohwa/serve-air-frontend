@@ -9,7 +9,7 @@ export const getOrigins = createAsyncThunk(
   async ({ token }, { rejectWithValue }) => {
     try {
       const response = await axios.get(ORIGINS_URL, {
-        headers: { Authorization: `Barer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status !== 200) throw new Error("Couldn't get origins");
       return response.data.data.origins;

@@ -14,7 +14,7 @@ export const getPackages = createAsyncThunk(
     try {
       const response = await axios.get(
         `${PACKAGES_URL}?address_id=${address_id}&origin_id=${origin_id}&destination_id=${destination_id}`,
-        { headers: { Authorization: `Barer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status !== 200) throw new Error("Couldn't get packages");
       console.log(response.data.data);
@@ -28,12 +28,12 @@ export const getPackages = createAsyncThunk(
 // Post package in the remote database
 export const postPackage = createAsyncThunk(
   "packages/postPackage",
-  async ({ newPackage, token }, { rejectWithValue }) => {
+  async ({ shippment, token }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         PACKAGES_URL,
-        { package: newPackage },
-        { headers: { Authorization: `Barer ${token}` } }
+        { shippment },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response?.status !== 200) throw new Error("Couldn't create package");
       return response.data.data.package;

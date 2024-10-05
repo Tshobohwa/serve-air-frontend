@@ -8,11 +8,12 @@ import RouteCard from "../cards/RouteCard";
 
 const PackageRoutes = () => {
   const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.users);
   const [addingRoute, setAddingRoute] = useState(false);
   const { routes } = useSelector((state) => state.routes);
 
   useEffect(() => {
-    dispatch(getRoutes());
+    dispatch(getRoutes({ token }));
   }, []);
   return (
     <Sidebar>

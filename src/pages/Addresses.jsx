@@ -5,16 +5,17 @@ import NewAddress from "../popups/NewAddress";
 import { useDispatch, useSelector } from "react-redux";
 import { getAddresses } from "../redux/slices/addressesSlice";
 import AddressCard from "../cards/AddressCard";
-import { BiLoader } from "react-icons/bi";
 import { BeatLoader } from "react-spinners";
 
 const Addresses = () => {
   const dispatch = useDispatch();
   const [addingAddress, setAddingAddress] = useState(false);
   const { addresses, isFetching } = useSelector((store) => store.addresses);
+  const { token } = useSelector((state) => state.users);
 
   useEffect(() => {
-    dispatch(getAddresses());
+    console.log(token);
+    dispatch(getAddresses({ token }));
   }, []);
 
   return (
@@ -34,7 +35,7 @@ const Addresses = () => {
           <BeatLoader size={32} color="#00ffff" />
         </div>
       )}
-      <div className="w-full grid grid-cols-4 gap-4 mt-4">
+      <div className="w-full grid grid-cols-4 gap-4 mt-4 pb-4">
         {!isFetching &&
           addresses.map((address) => (
             <AddressCard address={address} key={address.id} />

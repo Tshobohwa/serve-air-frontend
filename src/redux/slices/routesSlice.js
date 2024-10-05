@@ -10,7 +10,7 @@ export const getRoutes = createAsyncThunk(
   async ({ token }, { rejectWithValue }) => {
     try {
       const response = await axios.get(ROUTES_URL, {
-        headers: { Authorization: `Barer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status !== 200) throw new Error("Couldn't get routes");
       console.log(response.data.data);
@@ -28,7 +28,7 @@ export const postRoute = createAsyncThunk(
       const response = await axios.post(
         ROUTES_URL,
         { route },
-        { headers: { Authorization: `Barer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(route);
       console.log(response);

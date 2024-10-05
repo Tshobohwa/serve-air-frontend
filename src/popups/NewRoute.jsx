@@ -16,10 +16,17 @@ const NewRoute = ({ closeHandler }) => {
   const [destinationAddresses, setDestinationAddresses] = useState([]);
   const [pricing, setPricing] = useState(0);
 
+  const { token } = useSelector((state) => state.users);
+
   const { routePosted, isPostingRoute } = useSelector((state) => state.routes);
 
   const submitHandler = () => {
-    dispatch(postRoute({ origin_id, destination_id, pricing: +pricing }));
+    dispatch(
+      postRoute({
+        route: { origin_id, destination_id, pricing: +pricing },
+        token,
+      })
+    );
   };
 
   useEffect(() => {

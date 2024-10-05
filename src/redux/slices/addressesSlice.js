@@ -11,7 +11,7 @@ export const getOrigins = createAsyncThunk(
     try {
       const response = await axios.get(`${API_URL}/origins`, {
         headers: {
-          Authorization: `Barer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response.status !== 200) throw new Error("Couldn't get origins");
@@ -27,7 +27,7 @@ export const getDestinations = createAsyncThunk(
   async ({ token }, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/destinations`, {
-        headers: { Authorization: `Barer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status !== 200) throw new Error("Couldn't get destinations");
       return response.data.data.destinations;
@@ -39,11 +39,11 @@ export const getDestinations = createAsyncThunk(
 
 export const getAddresses = createAsyncThunk(
   "addresses/getAddresses",
-  async ({ token }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
+    console.log("Getting addresses");
     try {
-      const response = await axios.get(ADDRESSES_URL, {
-        headers: `Barer ${token}`,
-      });
+      const response = await axios.get(ADDRESSES_URL);
+      console.log(response);
       if (response.status !== 200) throw new Error("Couldn't get Addresses!");
       return response.data.data.addresses;
     } catch (err) {
@@ -59,7 +59,7 @@ export const postAddress = createAsyncThunk(
       const response = await axios.post(
         ADDRESSES_URL,
         { address },
-        { headers: { Authorization: `Barer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status !== 201) throw new Error("Couldn't post address");
       return response.data.data.address;

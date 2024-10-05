@@ -12,6 +12,8 @@ import {
 const NewAddress = ({ closeHandler }) => {
   const dispatch = useDispatch();
 
+  const { token } = useSelector((state) => state.users);
+
   const [city, setCity] = useState("");
   const [province, setProvince] = useState("");
   const [territory, setTerritory] = useState("");
@@ -27,7 +29,7 @@ const NewAddress = ({ closeHandler }) => {
       territory,
     };
     console.log(address);
-    dispatch(postAddress({ address }));
+    dispatch(postAddress({ address, token }));
   };
 
   useEffect(() => {

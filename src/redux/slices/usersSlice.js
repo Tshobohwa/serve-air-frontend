@@ -10,9 +10,11 @@ export const signup = createAsyncThunk(
         user,
       });
       if (response.status !== 200) throw new Error("Couldn't sign up user");
-      const data = response.data.status.data;
-      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      console.log(response);
+      const data = response.data.data;
+      localStorage.setItem("currentUser", JSON.stringify(data.current_user));
       localStorage.setItem("token", data.token);
+      return data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -42,7 +44,7 @@ export const login = createAsyncThunk(
 //   async ({ token }, { rejectWithValue }) => {
 //     try {
 //       const response = await axios.delete(`${BASE_URL}/logout`, {
-//         headers: { Authorization: `Barer ${token}` },
+//         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       if (response.status !== 200 || response.status !== 401)
 //         throw new Error("Couldn't logout");
@@ -72,7 +74,11 @@ const usersSlice = createSlice({
       return { ...state, currentUser: payload.user, token: payload.token };
     });
     builder.addCase(signup.fulfilled, (state, { payload }) => {
-      return { ...state, currentUser: payload.user, token: payload.token };
+      return {
+        ...state,
+        currentUser: payload.current_user,
+        token: payload.token,
+      };
     });
     // builder.addCase(logout.fulfilled, (state) => {
     //   localStorage.clear();
