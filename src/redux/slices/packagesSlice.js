@@ -5,6 +5,23 @@ import { toast } from "react-toastify";
 
 const PACKAGES_URL = `${API_URL}/packages`;
 
+export const updatePackage = createAsyncThunk(
+  "packages/updatePackage",
+  async ({ package_id, token, updates }) => {
+    try {
+      const response = await axios.patch(
+        `${PACKAGES_URL}/${package_id}`,
+        {
+          shippment: updates,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.status !== 200) throw new Error("Couldn't update package!");
+      return response.data.data.package;
+    } catch (error) {}
+  }
+);
+
 // Fetch the packages from the remote database
 export const getPackages = createAsyncThunk(
   "packages/getPackages",
@@ -14,7 +31,7 @@ export const getPackages = createAsyncThunk(
   ) => {
     try {
       const response = await axios.get(
-        `${PACKAGES_URL}?address_id=${address_id}&origin_id=${origin_id}&destination_id=${destination_id}`,
+        `${PACKAGES_URL}?address_id=${address_id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status !== 200) throw new Error("Couldn't get packages");
@@ -37,6 +54,7 @@ export const postPackage = createAsyncThunk(
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response?.status !== 201) throw new Error("Couldn't create package");
+      console.log(response.data.data.package);
       return response.data.data.package;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -49,9 +67,12 @@ const initialState = {
   currentPackage: null,
   incomingPackages: [],
   outgoingPackages: [],
+  warehouse: [],
   packageIsPosted: false,
   postPackageError: "",
   isPostingPackage: false,
+  isUpdatingPackage: false,
+  packageUpdated: false,
 };
 
 const packagesSlice = createSlice({
@@ -69,6 +90,9 @@ const packagesSlice = createSlice({
     removeCurrentPackage: (state) => {
       return { ...state, currentPackage: null };
     },
+    resetPackageUpdated: (state) => {
+      return { ...state, packageUpdated: false };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPackages.pending, (state) => {
@@ -81,6 +105,7 @@ const packagesSlice = createSlice({
         packages: payload.packages,
         incomingPackages: payload.incoming_packages,
         outgoingPackages: payload.outgoing_packages,
+        warehouse: payload.warehouse,
       };
     });
 
@@ -98,7 +123,8 @@ const packagesSlice = createSlice({
         ...state,
         isPostingPackage: false,
         packageIsPosted: true,
-        packages: [...state.packages, payload],
+        outgoingPackages: [payload, ...state.outgoingPackages],
+        warehouse: [payload, ...state.warehouse],
       };
     });
 
@@ -106,10 +132,27 @@ const packagesSlice = createSlice({
       toast.error("Couldn't post package!");
       return { ...state, isPostingPackage: false, postPackageError: payload };
     });
+    builder.addCase(updatePackage.pending, (state) => {
+      return { ...state, isUpdatingPackage: true };
+    });
+
+    builder.addCase(updatePackage.fulfilled, (state, { payload }) => {
+      toast.success("Package status successfully updated!");
+      return { ...state, isUpdatingPackage: false, packageUpdated: true };
+    });
+
+    builder.addCase(updatePackage.rejected, (state) => {
+      toast.error("Couldn't update package status!");
+      return state;
+    });
   },
 });
 
-export const { setCurrentPackage, removeCurrentPackage, resetIsPackagePosted } =
-  packagesSlice.actions;
+export const {
+  setCurrentPackage,
+  removeCurrentPackage,
+  resetIsPackagePosted,
+  resetPackageUpdated,
+} = packagesSlice.actions;
 
 export default packagesSlice.reducer;

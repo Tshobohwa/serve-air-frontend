@@ -1,10 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { LuWarehouse } from "react-icons/lu";
 import { GoPackageDependencies, GoPackageDependents } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getPackages } from "../redux/slices/packagesSlice";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const { currentUser, token } = useSelector((state) => state.users);
+  const { incomingPackages, outgoingPackages, warehouse } = useSelector(
+    (state) => state.packages
+  );
+
+  const [warehouseWeight, setwarehouseWeight] = useState(0);
+  const [warehousePrice, setwarehousePrice] = useState(0);
+
+  const [incomingPackagesWeight, setincomingPackagesWeight] = useState(0);
+  const [incomingPackagesPrice, setincomingPackagesPrice] = useState(0);
+
+  const [outgoingPackagesWeight, setoutgoingPackagesWeight] = useState(0);
+  const [outgoingPackagesPrice, setoutgoingPackagesPrice] = useState(0);
+
+  useEffect(() => {
+    let warehouseWeight = 0;
+    warehouse.forEach((shippment) => (warehouseWeight += shippment.weight));
+    setwarehouseWeight(warehouseWeight);
+
+    let warehousePrice = 0;
+    warehouse.forEach(
+      (shippment) => (warehousePrice += Number(shippment.price))
+    );
+    setwarehousePrice(warehousePrice);
+
+    let incomingPackagesWeight = 0;
+    incomingPackages.forEach(
+      (shippment) => (incomingPackagesWeight += shippment.weight)
+    );
+    setincomingPackagesWeight(incomingPackagesWeight);
+
+    let incomingPackagesPrice = 0;
+    incomingPackages.forEach(
+      (shippment) => (incomingPackagesPrice += Number(shippment.price))
+    );
+    setincomingPackagesPrice(incomingPackagesPrice);
+
+    let outgoingPackagesWeight = 0;
+    outgoingPackages.forEach(
+      (shippment) => (outgoingPackagesWeight += shippment.weight)
+    );
+    setoutgoingPackagesWeight(outgoingPackagesWeight);
+
+    console.log(outgoingPackages);
+    let outgoingPackagesPrice = 0;
+    outgoingPackages.forEach(
+      (shippment) => (outgoingPackagesPrice += Number(shippment.price))
+    );
+    setoutgoingPackagesPrice(outgoingPackagesPrice);
+  }, [incomingPackages, outgoingPackages, warehouse]);
+
+  useEffect(() => {
+    dispatch(getPackages({ address_id: currentUser.address_id, token }));
+  }, []);
   return (
     <Sidebar>
       <header className="w-full flex justify-between items-center">
@@ -18,9 +75,13 @@ const Dashboard = () => {
             </div>
             <div>
               <p>In warehouse</p>
-              <p className="text-2xl font-semibold">500 pkgs</p>
-              <p className="text-sm text-skyblue-800">Total weight: 3500 KG</p>
-              <p className="text-sm text-skyblue-800">Total price: 4800 USD</p>
+              <p className="text-2xl font-semibold">{warehouse.length} pkgs</p>
+              <p className="text-sm text-skyblue-800">
+                Total weight: {warehouseWeight} KG
+              </p>
+              <p className="text-sm text-skyblue-800">
+                Total price: {warehousePrice.toFixed(2)} USD
+              </p>
             </div>
           </div>
         </Link>
@@ -31,9 +92,15 @@ const Dashboard = () => {
             </div>
             <div>
               <p>Incoming packages</p>
-              <p className="text-2xl font-semibold">500 pkgs</p>
-              <p className="text-sm text-skyblue-800">Total weight: 3500 KG</p>
-              <p className="text-sm text-skyblue-800">Total price: 4800 USD</p>
+              <p className="text-2xl font-semibold">
+                {incomingPackages.length} pkgs
+              </p>
+              <p className="text-sm text-skyblue-800">
+                Total weight: {incomingPackagesWeight} KG
+              </p>
+              <p className="text-sm text-skyblue-800">
+                Total price: {incomingPackagesPrice.toFixed(2)} USD
+              </p>
             </div>
           </div>
         </Link>
@@ -44,9 +111,15 @@ const Dashboard = () => {
             </div>
             <div>
               <p>Outgoing packages</p>
-              <p className="text-2xl font-semibold">500 pkgs</p>
-              <p className="text-sm text-skyblue-800">Total weight: 3500 KG</p>
-              <p className="text-sm text-skyblue-800">Total price: 4800 USD</p>
+              <p className="text-2xl font-semibold">
+                {outgoingPackages.length} pkgs
+              </p>
+              <p className="text-sm text-skyblue-800">
+                Total weight: {outgoingPackagesWeight} KG
+              </p>
+              <p className="text-sm text-skyblue-800">
+                Total price: {outgoingPackagesPrice.toFixed(2)} USD
+              </p>
             </div>
           </div>
         </Link>

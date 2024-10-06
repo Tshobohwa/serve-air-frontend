@@ -64,9 +64,9 @@ const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    logout: () => {
+    logout: (state) => {
       localStorage.clear();
-      return initialState;
+      return { ...state, currentUser: null, token: null };
     },
   },
   extraReducers: (builder) => {

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAddresses } from "../redux/slices/addressesSlice";
 import AddressCard from "../cards/AddressCard";
 import { BeatLoader } from "react-spinners";
+import SearchInput from "../components/SearchInput";
 
 const Addresses = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,24 @@ const Addresses = () => {
   const { addresses, isFetching } = useSelector((store) => store.addresses);
   const { token } = useSelector((state) => state.users);
 
+  const [addressSearch, setAddressSearch] = useState("");
+
+  const [filteredAddresses, setFilteredAddresses] = useState([]);
+
   useEffect(() => {
     console.log(token);
     dispatch(getAddresses({ token }));
   }, []);
+
+  useEffect(() => {
+    setFilteredAddresses(
+      addresses.filter((address) =>
+        `${address.city} ${address.territory} ${address.province}`
+          .toLowerCase()
+          .includes(addressSearch.toLocaleLowerCase())
+      )
+    );
+  }, [addressSearch, addresses]);
 
   return (
     <Sidebar>
@@ -25,10 +40,17 @@ const Addresses = () => {
       )}
       <header className="w-full flex justify-between items-center">
         <h1 className="text-3xl font-semibold">Addresses</h1>
-        <SmallRoundedButton
-          name={"new address"}
-          onClick={() => setAddingAddress(true)}
-        />
+        <div className="flex items-center gap-4">
+          <SearchInput
+            value={addressSearch}
+            onChange={setAddressSearch}
+            placeholder={"Search address"}
+          />
+          <SmallRoundedButton
+            name={"new address"}
+            onClick={() => setAddingAddress(true)}
+          />
+        </div>
       </header>
       {isFetching && (
         <div className="w-full flex items-center justify-center my-[124px]">
@@ -37,7 +59,7 @@ const Addresses = () => {
       )}
       <div className="w-full grid grid-cols-4 gap-4 mt-4 pb-4">
         {!isFetching &&
-          addresses.map((address) => (
+          filteredAddresses.map((address) => (
             <AddressCard address={address} key={address.id} />
           ))}
       </div>
