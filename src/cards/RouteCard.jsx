@@ -46,7 +46,7 @@ const RouteCard = ({ route }) => {
           </p>
         </div>
         <button
-          className="w-[2rem] border border-sky-400 h-[2rem] rounded-full flex items-center justify-center"
+          className="w-[2rem] border border-sky-400 h-[2rem] rounded-full flex items-center justify-center hover:bg-skyblue-800 hover:text-white"
           onClick={() => setIsUpdatingRoute(true)}
         >
           <FaPen size={16} />

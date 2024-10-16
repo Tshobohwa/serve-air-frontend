@@ -5,6 +5,8 @@ import { GoPackageDependencies, GoPackageDependents } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPackages } from "../redux/slices/packagesSlice";
+import PackagesOriginisAndDestinationBarChart from "../charts/PackagesOriginisAndDestinationBarChart";
+import PackageStatusesPieChart from "../charts/PackageStatusesPieChart";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -62,6 +64,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getPackages({ address_id: currentUser.address_id, token }));
   }, []);
+
   return (
     <Sidebar>
       <header className="w-full flex justify-between items-center">
@@ -124,12 +127,18 @@ const Dashboard = () => {
           </div>
         </Link>
       </section>
-      <section className="grid grid-cols-1-2 mt-4 gap-4">
+      <section className="grid grid-cols-1-2 mt-4 gap-4 pb-4 pr-4">
         <div className="w-full p-4 bg-white border border-skyblue-200 rounded-lg">
           <p>Packages status</p>
+          <div>
+            <PackageStatusesPieChart />
+          </div>
         </div>
         <div className="w-full p-4 bg-white border border-skyblue-200 rounded-lg">
-          packages origins
+          <p>packages origins and destinations</p>
+          <div>
+            <PackagesOriginisAndDestinationBarChart />
+          </div>
         </div>
       </section>
     </Sidebar>
