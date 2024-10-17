@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPackages } from "../redux/slices/packagesSlice";
 import PackagesOriginisAndDestinationBarChart from "../charts/PackagesOriginisAndDestinationBarChart";
 import PackageStatusesPieChart from "../charts/PackageStatusesPieChart";
+import { getRoutes } from "../redux/slices/routesSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Dashboard = () => {
   const { incomingPackages, outgoingPackages, warehouse } = useSelector(
     (state) => state.packages
   );
+  const { routes } = useSelector((state) => state.routes);
 
   const [warehouseWeight, setwarehouseWeight] = useState(0);
   const [warehousePrice, setwarehousePrice] = useState(0);
@@ -63,6 +65,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getPackages({ address_id: currentUser.address_id, token }));
+    dispatch(getRoutes({ token }));
   }, []);
 
   return (
@@ -127,18 +130,41 @@ const Dashboard = () => {
           </div>
         </Link>
       </section>
-      <section className="grid grid-cols-1-2 mt-4 gap-4 pb-4 pr-4">
+      <section className="grid grid-cols-1-2 mt-4 gap-4 pb-4">
         <div className="w-full p-4 bg-white border border-skyblue-200 rounded-lg">
           <p>Packages status</p>
           <div>
             <PackageStatusesPieChart />
           </div>
         </div>
-        <div className="w-full p-4 bg-white border border-skyblue-200 rounded-lg">
-          <p>packages origins and destinations</p>
-          <div>
-            <PackagesOriginisAndDestinationBarChart />
-          </div>
+        <div className="w-full p-4 bg-white border border-skyblue-200 rounded-lg overflow-y-scroll">
+          <p className="pb-4">Routes pricings</p>
+          <table className="w-full">
+            <thead>
+              <tr className="h-[2.5rem] border border-skyblue-600 text-white bg-sky-600">
+                <th className="w-[35%]">Origin</th>
+                <th className="border-white border border-t-0 border-b-0 w-[35%]">
+                  Destination
+                </th>
+                <th>Pricing</th>
+              </tr>
+            </thead>
+            <tbody>
+              {routes.map((route, index) => (
+                <tr
+                  className={`${
+                    index % 2 === 1 ? "bg-skyblue-100" : ""
+                  } h-[2.5rem] border-l border-r border-skyblue-600 ${
+                    index === routes.length - 1 ? "border-b" : "border-b-0"
+                  }`}
+                >
+                  <td className="pl-4">{route.origin.address.city}</td>
+                  <td className="pl-4">{route.destination.address.city}</td>
+                  <td className="text-center">{route.pricing} USD / Kg</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
     </Sidebar>

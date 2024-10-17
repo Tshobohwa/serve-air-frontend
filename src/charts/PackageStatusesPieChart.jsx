@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useDrawingArea } from "@mui/x-charts/hooks";
 import { styled } from "@mui/material/styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getStatuses } from "../redux/slices/statusesSlice";
+import { getPackages } from "../redux/slices/packagesSlice";
 
 const PackageStatusesPieChart = () => {
   const dispatch = useDispatch();
+
+  const { token } = useSelector((state) => state.users);
+  const { statuses } = useSelector((state) => state.statuses);
+  const { incomingPackages, outgoingPackages } = useSelector(
+    (state) => state.packages
+  );
+
+  const [data, setData] = useState([]);
 
   const StyledText = styled("text")(({ theme }) => ({
     fill: theme.palette.text.primary,
@@ -23,18 +33,21 @@ const PackageStatusesPieChart = () => {
     );
   }
 
-  const data = [
-    { value: 5, label: "A" },
-    { value: 10, label: "B" },
-    { value: 15, label: "C" },
-    { value: 20, label: "D" },
-  ];
-
   const size = {
     width: 400,
     height: 300,
   };
 
+  useEffect(() => {
+    dispatch(getStatuses({ token }));
+    dispatch(getPackages({ token }));
+  }, []);
+
+  useEffect(() => {
+    const data = [];
+    statuses.map((status) => data.push({ label: status.name, value: 0 }));
+    setData(data);
+  }, [statuses, incomingPackages, outgoingPackages]);
   return (
     <PieChart series={[{ data, innerRadius: 110 }]} {...size}>
       <PieCenterLabel>Package statuses</PieCenterLabel>
