@@ -10,7 +10,6 @@ export const signup = createAsyncThunk(
         user,
       });
       if (response.status !== 200) throw new Error("Couldn't sign up user");
-      console.log(response);
       const data = response.data.data;
       localStorage.setItem("currentUser", JSON.stringify(data.current_user));
       localStorage.setItem("token", data.token);

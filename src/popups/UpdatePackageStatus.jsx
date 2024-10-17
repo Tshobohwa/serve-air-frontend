@@ -20,9 +20,7 @@ const UpdatePackageStatus = ({ closeHandler, shippingPackage }) => {
 
   const [status_id, setStatusId] = useState(shippingPackage.status_id);
 
-  useEffect(() => {
-    console.log(statuses);
-  }, [statuses]);
+  useEffect(() => {}, [statuses]);
 
   useEffect(() => {
     dispatch(getStatuses({ token }));

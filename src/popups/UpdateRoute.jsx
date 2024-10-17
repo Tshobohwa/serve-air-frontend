@@ -19,7 +19,6 @@ const UpdateRoute = ({ closeHandler, initialPricing, route }) => {
   );
   const submitHandler = () => {
     const route = { pricing };
-    console.log(token);
     dispatch(updateRoute({ route, id, token }));
   };
   useEffect(() => {

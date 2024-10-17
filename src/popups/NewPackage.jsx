@@ -51,8 +51,6 @@ const NewPackage = ({ closeHandler }) => {
           ? currentRoute?.destination?.address.id
           : currentRoute?.origin?.address.id,
     };
-    console.log(currentUser);
-    console.log(shippment);
     dispatch(
       postPackage({
         token,
@@ -70,9 +68,7 @@ const NewPackage = ({ closeHandler }) => {
   }, [route_id, routes]);
 
   useEffect(() => {
-    console.log(currentRoute);
     const intweight = +weight;
-    console.log(weight);
     setprice(currentRoute?.pricing ? currentRoute.pricing * intweight : 0);
   }, [currentRoute, weight]);
 

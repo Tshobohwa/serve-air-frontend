@@ -40,10 +40,8 @@ export const getDestinations = createAsyncThunk(
 export const getAddresses = createAsyncThunk(
   "addresses/getAddresses",
   async (_, { rejectWithValue }) => {
-    console.log("Getting addresses");
     try {
       const response = await axios.get(ADDRESSES_URL);
-      console.log(response);
       if (response.status !== 200) throw new Error("Couldn't get Addresses!");
       return response.data.data.addresses;
     } catch (err) {

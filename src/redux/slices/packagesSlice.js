@@ -35,7 +35,6 @@ export const getPackages = createAsyncThunk(
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status !== 200) throw new Error("Couldn't get packages");
-      console.log(response.data.data);
       return response.data.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -54,7 +53,6 @@ export const postPackage = createAsyncThunk(
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response?.status !== 201) throw new Error("Couldn't create package");
-      console.log(response.data.data.package);
       return response.data.data.package;
     } catch (err) {
       return rejectWithValue(err.message);

@@ -55,7 +55,6 @@ const Dashboard = () => {
     );
     setoutgoingPackagesWeight(outgoingPackagesWeight);
 
-    console.log(outgoingPackages);
     let outgoingPackagesPrice = 0;
     outgoingPackages.forEach(
       (shippment) => (outgoingPackagesPrice += Number(shippment.price))

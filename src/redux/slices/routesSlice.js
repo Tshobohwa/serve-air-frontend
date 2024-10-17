@@ -13,7 +13,6 @@ export const getRoutes = createAsyncThunk(
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status !== 200) throw new Error("Couldn't get routes");
-      console.log(response.data.data);
       return response.data.data.routes;
     } catch (error) {
       return rejectWithValue(error);
@@ -30,8 +29,6 @@ export const postRoute = createAsyncThunk(
         { route },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(route);
-      console.log(response);
       if (response.status !== 201) throw new Error("Couldn't post route");
       return response.data.data.route[0];
     } catch (err) {

@@ -28,7 +28,6 @@ const NewAddress = ({ closeHandler }) => {
       province,
       territory,
     };
-    console.log(address);
     dispatch(postAddress({ address, token }));
   };
 

@@ -19,7 +19,6 @@ const Addresses = () => {
   const [filteredAddresses, setFilteredAddresses] = useState([]);
 
   useEffect(() => {
-    console.log(token);
     dispatch(getAddresses({ token }));
   }, []);
 

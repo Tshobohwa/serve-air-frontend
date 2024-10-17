@@ -46,6 +46,27 @@ const PackageStatusesPieChart = () => {
   useEffect(() => {
     const data = [];
     statuses.map((status) => data.push({ label: status.name, value: 0 }));
+    incomingPackages.forEach((shippment) => {
+      console.log(shippment);
+      const currentStatus = data.find(
+        (data) => data.label === shippment.status.name
+      );
+
+      currentStatus.value = currentStatus.value + 1;
+
+      data.map((d) => (d.label === currentStatus.label ? currentStatus : d));
+    });
+    outgoingPackages.forEach((shippment) => {
+      const currentStatus = data.find(
+        (data) => data.label === shippment.status.name
+      );
+
+      currentStatus.value = currentStatus.value + 1;
+
+      data.map((d) => (d.label === currentStatus.label ? currentStatus : d));
+
+      console.log(shippment);
+    });
     setData(data);
   }, [statuses, incomingPackages, outgoingPackages]);
   return (
