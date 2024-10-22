@@ -3,21 +3,33 @@ import AuthTextInput from "../components/AuthTextInput";
 import logo from "./../assets/logo.png";
 import RoundedButton from "../components/RoundedButton";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/slices/usersSlice";
+import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
+
+  const { isPending } = useSelector((state) => state.users);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submitHandler = () => {
-    if (email.trim() === "" || password === "") return;
+    if (email.trim() === "" || password === "") {
+      toast.error("Please enter email and password!");
+      return;
+    }
     const user = { email, password };
     dispatch(login({ user }));
   };
   return (
     <div className=" w-full h-[100vh] flex items-center justify-center bg-white">
+      <ToastContainer
+        autoClose={5000}
+        // transition={Slide}
+        hideProgressBar={true}
+      />
       <div className=" p-4 flex flex-col w-[35rem] items-center gap-[2rem]">
         <img src={logo} alt="" className="h-[100px]" />
         <h1 className="font-outfit text-2xl font-semibold text-black">
@@ -37,7 +49,11 @@ const Login = () => {
             label={"Password"}
             value={password}
           />
-          <RoundedButton children={"login"} onClick={submitHandler} />
+          <RoundedButton
+            children={"login"}
+            onClick={submitHandler}
+            isLoading={isPending}
+          />
         </div>
         <p>
           Don't have an account?{" "}

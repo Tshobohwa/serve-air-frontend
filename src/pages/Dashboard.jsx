@@ -8,6 +8,12 @@ import { getPackages } from "../redux/slices/packagesSlice";
 import PackagesOriginisAndDestinationBarChart from "../charts/PackagesOriginisAndDestinationBarChart";
 import PackageStatusesPieChart from "../charts/PackageStatusesPieChart";
 import { getRoutes } from "../redux/slices/routesSlice";
+import { CiLocationArrow1 } from "react-icons/ci";
+import {
+  getAddresses,
+  setCurrentAddress,
+} from "../redux/slices/addressesSlice";
+import { FaLocationDot } from "react-icons/fa6";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -15,6 +21,7 @@ const Dashboard = () => {
   const { incomingPackages, outgoingPackages, warehouse } = useSelector(
     (state) => state.packages
   );
+  const { addresses, currentAddress } = useSelector((state) => state.addresses);
   const { routes } = useSelector((state) => state.routes);
 
   const [warehouseWeight, setwarehouseWeight] = useState(0);
@@ -65,12 +72,24 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getPackages({ address_id: currentUser.address_id, token }));
     dispatch(getRoutes({ token }));
+    dispatch(getAddresses());
+    console.log(currentUser);
   }, []);
+
+  useEffect(() => {
+    console.log(addresses);
+    if (!addresses) return;
+    dispatch(setCurrentAddress(currentUser.id));
+  }, [addresses]);
 
   return (
     <Sidebar>
       <header className="w-full flex justify-between items-center">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
+        <div className="flex justify-between gap-4">
+          <FaLocationDot />
+          <p className="font-semibold">{currentAddress?.city}</p>
+        </div>
       </header>
       <section className="w-full grid grid-cols-3 gap-4 mt-4">
         <Link to={"/warehouse"}>

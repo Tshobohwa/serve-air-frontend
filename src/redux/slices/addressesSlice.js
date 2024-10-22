@@ -77,6 +77,7 @@ const initialState = {
   currentDestination: null,
   addressPosted: false,
   isPostingAddress: false,
+  currentAddress: {},
 };
 
 const addressesSlice = createSlice({
@@ -96,6 +97,12 @@ const addressesSlice = createSlice({
       );
 
       return { ...state, currentDestination, currentOrigin };
+    },
+    setCurrentAddress: (state, { payload }) => {
+      const currentAddress = state.addresses.find(
+        (address) => address.id === payload
+      );
+      return { ...state, currentAddress };
     },
   },
 
@@ -145,7 +152,10 @@ const addressesSlice = createSlice({
   },
 });
 
-export const { setCurrentOriginAndCurrentDestination, resetAddressPosted } =
-  addressesSlice.actions;
+export const {
+  setCurrentOriginAndCurrentDestination,
+  resetAddressPosted,
+  setCurrentAddress,
+} = addressesSlice.actions;
 
 export default addressesSlice.reducer;

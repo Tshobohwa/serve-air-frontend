@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../api/api";
+import { toast } from "react-toastify";
 
 export const signup = createAsyncThunk(
   "users/signup",
@@ -27,13 +28,18 @@ export const login = createAsyncThunk(
       const response = await axios.post(`${BASE_URL}/login`, {
         user,
       });
-      if (response.status !== 200) throw new Error("Invalid email or password");
+      if (response.status !== 200)
+        throw new Error(
+          response.data ? response.data : "An error occured please try again!"
+        );
       const data = response.data.status.data;
       localStorage.setItem("currentUser", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
       return response.data.status.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(
+        error.response?.data || "An Error occured please try again!"
+      );
     }
   }
 );
@@ -57,6 +63,7 @@ export const login = createAsyncThunk(
 const initialState = {
   currentUser: JSON.parse(localStorage.getItem("currentUser")) || null,
   token: localStorage.getItem("token") || null,
+  isPending: false,
 };
 
 const usersSlice = createSlice({
@@ -69,8 +76,20 @@ const usersSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(login.pending, (state) => {
+      return { ...state, isPending: true };
+    });
     builder.addCase(login.fulfilled, (state, { payload }) => {
-      return { ...state, currentUser: payload.user, token: payload.token };
+      return {
+        ...state,
+        currentUser: payload.user,
+        token: payload.token,
+        isPending: false,
+      };
+    });
+    builder.addCase(login.rejected, (state, { payload }) => {
+      toast.error(payload);
+      return { ...state, isPending: false };
     });
     builder.addCase(signup.fulfilled, (state, { payload }) => {
       return {
@@ -79,10 +98,6 @@ const usersSlice = createSlice({
         token: payload.token,
       };
     });
-    // builder.addCase(logout.fulfilled, (state) => {
-    //   localStorage.clear();
-    //   return initialState;
-    // });
   },
 });
 

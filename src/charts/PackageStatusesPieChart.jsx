@@ -60,7 +60,7 @@ const PackageStatusesPieChart = () => {
         (data) => data.label === shippment.status.name
       );
 
-      currentStatus.value = currentStatus.value + 1;
+      currentStatus.value = currentStatus?.value + 1;
 
       data.map((d) => (d.label === currentStatus.label ? currentStatus : d));
     });
